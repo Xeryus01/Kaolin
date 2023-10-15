@@ -50,7 +50,7 @@
             <div class="row">
                 <div class="col-lg-6 d-flex flex-column justify-content-center">
                     <h1 data-aos="fade-up">Kaolin</h1>
-                    <h2 data-aos="fade-up" data-aos-delay="400">Mari melakukan konsultasi statistik dengan BPS Kota Pangkalpinang</h2>
+                    <h2 data-aos="fade-up" data-aos-delay="400">Mari melakukan konsultasi statistik yang asyik dan seru dengan BPS Kota Pangkalpinang</h2>
                     <div data-aos="fade-up" data-aos-delay="600">
                         <div class="text-center text-lg-start">
                             <a href="<?= base_url('pengajuan_konsultasi'); ?>" class="btn-get-started scrollto d-inline-flex align-items-center justify-content-center align-self-center">
@@ -78,9 +78,9 @@
                     <div class="col-lg-6 d-flex flex-column justify-content-center" data-aos="fade-up" data-aos-delay="200">
                         <div class="content">
                             <h3>Apa itu Kaolin?</h3>
-                            <h2>Kaolin merupakan ....</h2>
+                            <h2>Kaolin merupakan sistem informasi untuk penjadwalan konsultasi BPS Kota Pangkalpinang</h2>
                             <p>
-                                Quisquam vel ut sint cum eos hic dolores aperiam. Sed deserunt et. Inventore et et dolor consequatur itaque ut voluptate sed et. Magnam nam ipsum tenetur suscipit voluptatum nam et est corrupti.
+                                Kaolin dapat digunakan oleh masyarakat umum, baik Organisasi Perangkat Daerah (OPD) maupun Mahasiswa untuk mengajukan jadwal konsultasi data maupun konsultasi statistik dengan BPS Kota Pangkalpinang.
                             </p>
                         </div>
                     </div>
@@ -163,106 +163,45 @@
                         </ul>
                     </div>
                 </div>
-
-                <div class="row gy-4 portfolio-container" data-aos="fade-up" data-aos-delay="200">
-
-                    <div class="card col-lg-4 portfolio-item filter-October-2023">
-                        <div class="card-body">
-                            <h5 class="card-title text-center" style="font-weight:bold">
-                                <u>Badan Pemerintahan Daerah</u>
-                            </h5>
-                            <br>
-                            <p class="card-text">Nama &emsp;&emsp;&emsp;: Akhmad Fadil</p>
-                            <p class="card-text">Jabatan &emsp;&emsp;&nbsp;: Mahasiswa</p>
-                            <p class="card-text">Tanggal &emsp;&emsp;&nbsp;: 4 Oktober 2023</p>
-                            <p class="card-text">Keperluan &emsp;: Konsultasi Satu Data Pangkalpinang</p>
-                            <!-- <a href="#" class="btn btn-primary">Go somewhere</a> -->
-                        </div>
-                        <div class="card-footer text-muted text-center">
-                            10 days more
-                        </div>
-                    </div>
-
-                    <div class="card col-lg-4 portfolio-item filter-October-2023">
-                        <div class="card-body">
-                            <h5 class="card-title text-center" style="font-weight:bold">
-                                <u>Badan Pemerintahan Daerah</u>
-                            </h5>
-                            <br>
-                            <p class="card-text">Nama &emsp;&emsp;&emsp;: Akhmad Fadil</p>
-                            <p class="card-text">Jabatan &emsp;&emsp;&nbsp;: Mahasiswa</p>
-                            <p class="card-text">Tanggal &emsp;&emsp;&nbsp;: 4 Oktober 2023</p>
-                            <p class="card-text">Keperluan &emsp;: Konsultasi Satu Data Pangkalpinang</p>
-                            <!-- <a href="#" class="btn btn-primary">Go somewhere</a> -->
-                        </div>
-                        <div class="card-footer text-muted text-center">
-                            10 days more
-                        </div>
-                    </div>
-
-                    <div class="card col-lg-4 portfolio-item filter-October-2023">
-                        <div class="card-body">
-                            <h5 class="card-title text-center" style="font-weight:bold">
-                                <u>Badan Pemerintahan Daerah</u>
-                            </h5>
-                            <br>
-                            <p class="card-text">Nama &emsp;&emsp;&emsp;: Akhmad Fadil</p>
-                            <p class="card-text">Jabatan &emsp;&emsp;&nbsp;: Mahasiswa</p>
-                            <p class="card-text">Tanggal &emsp;&emsp;&nbsp;: 4 Oktober 2023</p>
-                            <p class="card-text">Keperluan &emsp;: Konsultasi Satu Data Pangkalpinang</p>
-                            <!-- <a href="#" class="btn btn-primary">Go somewhere</a> -->
-                        </div>
-                        <div class="card-footer text-muted text-center">
-                            10 days more
-                        </div>
-                    </div>
-
-                    <!-- <div class="col-lg-4 col-md-6 portfolio-item filter-September-2023">
-                        <div class="portfolio-wrap">
-                            <img src="assets/img/portfolio/portfolio-4.jpg" class="img-fluid" alt="">
-                            <div class="portfolio-info">
-                                <p>4</p>
-                                <h4>September 2023</h4>
-                                <div class="portfolio-links">
-                                    <a href="assets/img/portfolio/portfolio-4.jpg" data-gallery="portfolioGallery" class="portfokio-lightbox" title="Card 2"><i class="bi bi-plus"></i></a>
-                                    <a href="portfolio-details.html" title="More Details"><i class="bi bi-link"></i></a>
+                <div class="row portfolio-container" data-aos="fade-up" data-aos-delay="200">
+                    <?php for ($i = 0; $i < count($kueri); $i++) :
+                        $month = date('F', strtotime($kueri[$i]['tanggal'])); ?>
+                        <div class="col-xl-4 col-lg-4 portfolio-item filter-<?= $month ?>-2023">
+                            <div class="card shadow mb-4">
+                                <!-- Card Body -->
+                                <div class="card-body">
+                                    <h5 class="card-title text-center" style="font-weight:bold">
+                                        <u><?= $kueri[$i]['instansi'] ?></u>
+                                    </h5>
+                                    <br>
+                                    <p class="card-text">Nama &emsp;&emsp;&emsp;: <?= $kueri[$i]['user_konsultasi'] ?></p>
+                                    <p class="card-text">Tanggal &emsp;&emsp;&nbsp;: <?= $kueri[$i]['tanggal'] ?></p>
+                                    <p class="card-text">Keperluan &emsp;: <?= $kueri[$i]['keperluan'] ?></p>
+                                    <div class="text-center">
+                                        <a href="<?= base_url('detail_konsultasi/') . $kueri[$i]['tiket'] ?>" class="btn btn-primary">Detail</a>
+                                    </div>
+                                </div>
+                                <div class="card-footer text-muted text-center">
+                                    <?php
+                                    $now = date_create(date('Y-m-d'));
+                                    $tanggal_konsultasi = date_create($kueri[$i]['tanggal']);
+                                    $diff = date_diff($now, $tanggal_konsultasi);
+                                    $diff = $diff->format('%R%a days');
+                                    if (substr($diff, 0, 1) == "+") {
+                                        if (substr($diff, 1, 1) == "0")
+                                            echo "Today";
+                                        else
+                                            echo substr($diff, 1, strlen($diff)) . " more";
+                                    } else {
+                                        echo substr($diff, 1, strlen($diff)) . " ago";
+                                    }
+                                    ?>
                                 </div>
                             </div>
                         </div>
-                    </div>
-
-                    <div class="col-lg-4 col-md-6 portfolio-item filter-October-2023">
-                        <div class="portfolio-wrap">
-                            <img src="assets/img/portfolio/portfolio-5.jpg" class="img-fluid" alt="">
-                            <div class="portfolio-info">
-                                <p>19</p>
-                                <h4>October 2023</h4>
-                                <div class="portfolio-links">
-                                    <a href="assets/img/portfolio/portfolio-5.jpg" data-gallery="portfolioGallery" class="portfokio-lightbox" title="Web 2"><i class="bi bi-plus"></i></a>
-                                    <a href="portfolio-details.html" title="More Details"><i class="bi bi-link"></i></a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-lg-4 col-md-6 portfolio-item filter-November-2023">
-                        <div class="portfolio-wrap">
-                            <img src="assets/img/portfolio/portfolio-6.jpg" class="img-fluid" alt="">
-                            <div class="portfolio-info">
-                                <p>10</p>
-                                <h4>November 2023</h4>
-                                <div class="portfolio-links">
-                                    <a href="assets/img/portfolio/portfolio-6.jpg" data-gallery="portfolioGallery" class="portfokio-lightbox" title="App 3"><i class="bi bi-plus"></i></a>
-                                    <a href="portfolio-details.html" title="More Details"><i class="bi bi-link"></i></a>
-                                </div>
-                            </div>
-                        </div>
-                    </div> -->
-
+                    <?php endfor; ?>
                 </div>
-
             </div>
-
         </section>
         <!-- End Portfolio Section -->
 

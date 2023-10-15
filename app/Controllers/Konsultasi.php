@@ -2,8 +2,6 @@
 
 namespace App\Controllers;
 
-use App\Models\KonsultasiModel;
-
 class Konsultasi extends BaseController
 {
     public function index(): string
@@ -104,22 +102,26 @@ Pengajuan telah diterima, mohon ditunggu untuk jadwal konsultasi yang akan diber
 
     public function my_menu(): string
     {
-        $model = new KonsultasiModel();
+        $model = new \App\Models\KonsultasiModel();
 
+        // get semua konsultasi yang dibuat user login
         $user_id = session()->get()['user']['id'];
         $query = $model->getByUser($user_id);
 
         $data = [
             'kueri' => $query
         ];
-        return view('my_menu', $data);
 
-        // return view('my_menu');
+        // sort data konsultasi berdasarkan tanggal konsultasi
+        $dates = array_column($data['kueri'], 'tanggal');
+        array_multisort($dates, SORT_ASC, $data['kueri']);
+
+        return view('my_menu', $data);
     }
 
     public function pengajuan_wa($text, $admin_text, $no_user)
     {
-        // persiapan no kaolin dan api_key
+        // persiapan no hp kaolin dan api_key
         $no_admin = '+62895345599400';
         $apikey = '3a9DzEE5TkQf';
 
@@ -149,7 +151,7 @@ Pengajuan telah diterima, mohon ditunggu untuk jadwal konsultasi yang akan diber
                 ->update();
             $alert = "<script>toastr.info('Are you the 6 fingered man?')</script>";
             session()->setFlashdata('flash', $alert);
-            return redirect()->to(base_url());
+            return redirect()->to(base_url('admin/konsultasi_list'));
         } catch (\Throwable $th) {
             echo "Gagal melakukan konfirmasi konsultasi dengan no tiket" . $token;
             echo $th;

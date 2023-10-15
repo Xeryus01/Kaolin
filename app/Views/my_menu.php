@@ -59,44 +59,44 @@
                     <br>
                     <br>
                 </div>
-
-                <div class="row gy-4 portfolio-container" data-aos="fade-up" data-aos-delay="200">
-                    <?php
-                    for ($i = 0; $i < count($kueri); $i++) : ?>
-                        <div class="card col-lg-4 portfolio-item filter-October-2023">
-                            <div class="card-body">
-                                <h5 class="card-title text-center" style="font-weight:bold">
-                                    <u><?= $kueri[$i]['instansi'] ?></u>
-                                </h5>
-                                <br>
-                                <p class="card-text">Nama &emsp;&emsp;&emsp;: <?= $kueri[$i]['user_konsultasi'] ?></p>
-                                <p class="card-text">Tanggal &emsp;&emsp;&nbsp;: <?= $kueri[$i]['tanggal'] ?></p>
-                                <p class="card-text">Keperluan &emsp;: <?= $kueri[$i]['keperluan'] ?></p>
-                                <div class="text-center">
-                                    <a href="<?= base_url('detail_konsultasi/') . $kueri[$i]['tiket'] ?>" class="btn btn-primary">Detail</a>
+                <div class="row portfolio-container" data-aos="fade-up" data-aos-delay="200">
+                    <?php for ($i = 0; $i < count($kueri); $i++) :
+                        $month = date('F', strtotime($kueri[$i]['tanggal'])); ?>
+                        <div class="col-xl-4 col-lg-4 portfolio-item filter-<?= $month ?>-2023">
+                            <div class="card shadow mb-4">
+                                <!-- Card Body -->
+                                <div class="card-body">
+                                    <h5 class="card-title text-center" style="font-weight:bold">
+                                        <u><?= $kueri[$i]['instansi'] ?></u>
+                                    </h5>
+                                    <br>
+                                    <p class="card-text">Nama &emsp;&emsp;&emsp;: <?= $kueri[$i]['user_konsultasi'] ?></p>
+                                    <p class="card-text">Tanggal &emsp;&emsp;&nbsp;: <?= $kueri[$i]['tanggal'] ?></p>
+                                    <p class="card-text">Keperluan &emsp;: <?= $kueri[$i]['keperluan'] ?></p>
+                                    <div class="text-center">
+                                        <a href="<?= base_url('detail_konsultasi/') . $kueri[$i]['tiket'] ?>" class="btn btn-primary">Detail</a>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="card-footer text-muted text-center">
-                                <?php
-                                $now = date_create(date('Y-m-d'));
-                                $tanggal_konsultasi = date_create($kueri[$i]['tanggal']);
-                                $diff = date_diff($now, $tanggal_konsultasi);
-                                $diff = $diff->format('%R%a days');
-                                if (substr($diff, 0, 1) == "+") {
-                                    if (substr($diff, 1, 1) == "0")
-                                        echo "Today";
-                                    else
-                                        echo substr($diff, 1, strlen($diff)) . " more";
-                                } else {
-                                    echo substr($diff, 1, strlen($diff)) . " ago";
-                                }
-                                ?>
+                                <div class="card-footer text-muted text-center">
+                                    <?php
+                                    $now = date_create(date('Y-m-d'));
+                                    $tanggal_konsultasi = date_create($kueri[$i]['tanggal']);
+                                    $diff = date_diff($now, $tanggal_konsultasi);
+                                    $diff = $diff->format('%R%a days');
+                                    if (substr($diff, 0, 1) == "+") {
+                                        if (substr($diff, 1, 1) == "0")
+                                            echo "Today";
+                                        else
+                                            echo substr($diff, 1, strlen($diff)) . " more";
+                                    } else {
+                                        echo substr($diff, 1, strlen($diff)) . " ago";
+                                    }
+                                    ?>
+                                </div>
                             </div>
                         </div>
                     <?php endfor; ?>
-
                 </div>
-
             </div>
 
         </section>

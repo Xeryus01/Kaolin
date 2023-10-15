@@ -2,12 +2,23 @@
 
 namespace App\Controllers;
 
+use App\Models\KonsultasiModel;
+
 class Home extends BaseController
 {
     public function index(): string
     {
         date_default_timezone_set("Asia/Jakarta");
-        return view('home');
+        $model = new KonsultasiModel();
+
+        // get semua konsultasi
+        $query = $model->getAll();
+
+        $data = [
+            'kueri' => $query
+        ];
+
+        return view('home', $data);
     }
 
     public function wa(): void
