@@ -2,6 +2,8 @@
 
 namespace App\Controllers;
 
+use App\Models\KonsultasiModel;
+
 class Konsultasi extends BaseController
 {
     public function index(): string
@@ -24,10 +26,12 @@ class Konsultasi extends BaseController
         $length = 6;
         $str = '1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZabcefghijklmnopqrstuvwxyz';
         $token =  substr(str_shuffle($str), 0, $length);
+        $token_admin =  substr(str_shuffle($str), 0, $length);
 
         // pengambilan data hasil form konsultasi dan penyiapan data yang dimasukan database
         $data = $this->request->getPost();
         $data['tiket'] = $token;
+        $data['token_admin'] = $token_admin;
         $data['konfirmasi_admin'] = 0;
         $data['created_by'] = session('user')['id'];
 
@@ -82,11 +86,16 @@ class Konsultasi extends BaseController
 - Tanggal ' . $date . '
 - Sesi ' . $sesi . PHP_EOL . '
 Pengajuan telah diterima, mohon ditunggu untuk jadwal konsultasi yang akan diberikan';
-            $this->pengajuan_wa($message, $no_user);
+            $admin_text = '*PEMBERITAHUAN*' . PHP_EOL .
+                'Kegiatan konsultasi dengan no tiket ' . $token . ' pada tanggal ' . $date . ' dengan sesi ' . $sesi . ' telah diterima' . PHP_EOL .
+                'Klik link berikut untuk melakukan konfirmasi pengajuan konsultasi ' . PHP_EOL . PHP_EOL .
+                base_url('konfirmasi_admin/' . $token . '/' . $token_admin);
+            $this->pengajuan_wa($message, $admin_text, $no_user);
         } catch (\Throwable $th) {
             // notif wa apabila pengajuan konsultasi gagal dilakukan
             $message = 'Pengajuan konsultasi anda dengan no tiket ' . $token . ' gagal diajukan, mohon ulangi permohonan pengajuan yang dibuat';
-            $this->pengajuan_wa($message, $no_user);
+            $admin_text = false;
+            $this->pengajuan_wa($message, $admin_text, $no_user);
         }
         // tampilkan notif berhasil atau gagal di website
 
@@ -95,37 +104,48 @@ Pengajuan telah diterima, mohon ditunggu untuk jadwal konsultasi yang akan diber
 
     public function my_menu(): string
     {
-        return view('my_menu');
+        $model = new KonsultasiModel();
+
+        $user_id = session()->get()['user']['id'];
+        $query = $model->getByUser($user_id);
+
+        $data = [
+            'kueri' => $query
+        ];
+        return view('my_menu', $data);
+
+        // return view('my_menu');
     }
 
-    public function pengajuan_wa($text, $no_user)
+    public function pengajuan_wa($text, $admin_text, $no_user)
     {
         // persiapan no kaolin dan api_key
-        $no_admin = '+6289601127878';
-        $apikey = 'vCPQ2cxzV6Kn';
+        $no_admin = '+62895345599400';
+        $apikey = '3a9DzEE5TkQf';
 
-        $admin_text = '*PEMBERITAHUAN*' . PHP_EOL . $text . PHP_EOL . 'Telah berhasil dikirim';
         $url_user = 'http://api.textmebot.com/send.php?recipient=' . $no_user . '&apikey=' . $apikey . '&text=' . urlencode($text) . '&json=yes';
         $url_admin = 'http://api.textmebot.com/send.php?recipient=' . $no_admin . '&apikey=' . $apikey . '&text=' . urlencode($admin_text) . '&json=yes';
 
         $ch = curl_init($url_user);
         $result = curl_exec($ch);
 
-        if ($result) {
-            sleep(8);
-            curl_setopt($ch, CURLOPT_URL, $url_admin);
-            $result = curl_exec($ch);
-        }
+        if ($admin_text != false)
+            if ($result) {
+                sleep(8);
+                curl_setopt($ch, CURLOPT_URL, $url_admin);
+                $result = curl_exec($ch);
+            }
         curl_close($ch);
     }
 
-    public function konfirmasi_pengajuan($token)
+    public function konfirmasi_pengajuan($token, $token_admin)
     {
         // konfirmasi dari admin untuk pengajuan konsultasi
         $model = new \App\Models\KonsultasiModel();
         try {
             $model->set('konfirmasi_admin', 1)
                 ->where('tiket', $token)
+                ->where('token_admin', $token_admin)
                 ->update();
             $alert = "<script>toastr.info('Are you the 6 fingered man?')</script>";
             session()->setFlashdata('flash', $alert);

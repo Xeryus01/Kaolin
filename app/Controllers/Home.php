@@ -12,20 +12,30 @@ class Home extends BaseController
 
     public function wa(): void
     {
-        // $phone = '+6282226602929';
-        // $apikey = 'w2LjAKfQRfgz';
-        // $ticket = 'Hasil generate';
-        // $message = 'Pengajuan konsultasi anda dengan no tiket ' . $ticket . ' telah diterima oleh BPS Kota Pangkalpinang, mohon ditunggu untuk jadwal konsultasi yang akan diberikan';
+        // generate token konsultasi
+        $length = 6;
+        $str = '1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZabcefghijklmnopqrstuvwxyz';
+        $token =  substr(str_shuffle($str), 0, $length);
+        $token_admin =  substr(str_shuffle($str), 0, $length);
 
-        // $url = 'http://api.textmebot.com/send.php?recipient=' . $phone . '&apikey=' . $apikey . '&text=' . urlencode($message) . '&json=yes';
-        // $html = file_get_contents($url);
-
-        $no_user = '+6289601127878';
-        $apikey = '4730735';
-        $text = 'This 2 is a test from PHP';
-
-        $url = 'https://api.callmebot.com/whatsapp.php?source=php&phone=' . $no_user . '&text=' . urlencode($text) . '&apikey=' . $apikey;
+        $phone = '+62895345599400';
+        $apikey = '3a9DzEE5TkQf';
+        $ticket = 'Hasil generate';
+        $message =
+            'Pengajuan konsultasi dengan detail sebagai berikut
+Pengajuan telah diterima, mohon ditunggu untuk jadwal konsultasi yang akan diberikan';
+        $message = '*PEMBERITAHUAN*' . PHP_EOL . $message . PHP_EOL .
+            'Telah berhasil dikirim' . PHP_EOL .
+            'Klik link berikut untuk melakukan konfirmasi pengajuan konsultasi ' . base_url('konfirmasi_admin/' . $token . '/' . $token_admin);
+        $url = 'http://api.textmebot.com/send.php?recipient=' . $phone . '&apikey=' . $apikey . '&text=' . urlencode($message) . '&json=yes';
         $html = file_get_contents($url);
-        dd($url);
+        dd($html);
+        // $no_user = '+628953345599400';
+        // $apikey = '4730735';
+        // $text = 'This 2 is a test from PHP';
+
+        // $url = 'https://api.callmebot.com/whatsapp.php?source=php&phone=' . $no_user . '&text=' . urlencode($text) . '&apikey=' . $apikey;
+        // $html = file_get_contents($url);
+        // dd($url);
     }
 }
