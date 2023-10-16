@@ -8,6 +8,8 @@ class Home extends BaseController
 {
     public function index(): string
     {
+        // session()->get()['user']['id'];
+
         date_default_timezone_set("Asia/Jakarta");
         $model = new KonsultasiModel();
 
@@ -17,6 +19,11 @@ class Home extends BaseController
         $data = [
             'kueri' => $query
         ];
+
+        for ($i = 0; $i < count($data['kueri']); $i++) {
+            $time = strtotime($data['kueri'][$i]['tanggal']);
+            $data['kueri'][$i]['tanggal'] = date("d-m-Y", $time);
+        }
 
         return view('home', $data);
     }

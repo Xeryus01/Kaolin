@@ -53,6 +53,7 @@
                 <h6 class="collapse-header">Konsultasi:</h6>
                 <a class="collapse-item" href="<?= base_url('admin/konsultasi_list'); ?>">Daftar Konsultasi</a>
                 <a class="collapse-item" href="<?= base_url('admin/konsultasi_confirm'); ?>">Konfirmasi Konsultasi</a>
+                <a class="collapse-item" href="<?= base_url('admin/konsultasi_confirm'); ?>">Ganti Jadwal Konsultasi</a>
                 <a class="collapse-item" href="<?= base_url('admin/konsultasi_add_link'); ?>">Tambah Link Konsultasi</a>
                 <a class="collapse-item" href="<?= base_url('admin/konsultasi_delete'); ?>">Hapus Konsultasi</a>
             </div>
