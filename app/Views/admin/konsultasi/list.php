@@ -1,27 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="">
-    <meta name="author" content="">
-
-    <title>SB Admin 2 - Tables</title>
-
-    <!-- Custom fonts for this template -->
-    <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
-    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
-
-    <!-- Custom styles for this template -->
-    <link href="css/sb-admin-2.min.css" rel="stylesheet">
-
-    <!-- Custom styles for this page -->
-    <link href="vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
-
-</head>
+<?= $this->include('\App\Views\admin\template\html') ?>
 
 <body id="page-top">
 
@@ -40,11 +17,6 @@
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
 
-                    <!-- Page Heading
-                    <h1 class="h3 mb-2 text-gray-800">Tables</h1>
-                    <p class="mb-4">DataTables is a third party plugin that is used to generate the demo table below.
-                        For more information about DataTables, please visit the <a target="_blank" href="https://datatables.net">official DataTables documentation</a>.</p> -->
-
                     <!-- Content Header (Page header) -->
                     <div class="content-header">
                         <div class="container-fluid">
@@ -55,8 +27,8 @@
                                 </div><!-- /.col -->
                                 <div class="col-sm-6">
                                     <ol class="breadcrumb float-sm-right text-sm mr-2">
-                                        <li class="breadcrumb-item"><a href="<?= base_url('admin/index') ?>">Home</a></li>
-                                        <li class="breadcrumb-item text-muted"><span>Users Management</span></li>
+                                        <li class="breadcrumb-item"><a href="<?= base_url('admin/index') ?>">Admin</a></li>
+                                        <li class="breadcrumb-item text-muted"><span>Konsultasi Management</span></li>
                                     </ol>
                                 </div><!-- /.col -->
                             </div><!-- /.row -->
@@ -95,7 +67,7 @@
                                                     <?= $data['tiket'] ?>
                                                 </td>
                                                 <td>
-                                                    <?= $data['instansi'] ?>
+                                                    <?= $data['nama_instansi'] ?>
                                                 </td>
                                                 <td>
                                                     <?= $data['keperluan'] ?>
@@ -124,9 +96,9 @@
                                                         <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
                                                             <a class="dropdown-item" type="button" href="<?= base_url('change_status_user/' . $data['id']) ?>"><i class="fas fa-info text-secondary"></i>&ensp;Detail</a>
                                                             <?php if ($data['konfirmasi_admin'] == 1) : ?>
-                                                                <a class="dropdown-item" type="button" href="<?= base_url('change_status_user/' . $data['id']) ?>"><i class="fas fa-toggle-off text-secondary"></i>&ensp;Batalkan Konfirmasi</a>
+                                                                <button class="dropdown-item" type="button" data-toggle="modal" data-target="#confirm_konsultasi" data-tiket="<?= $data['tiket'] ?>" data-admin="cancel"><i class="fas fa-toggle-off text-secondary"></i>&ensp;Batalkan Konfirmasi</button>
                                                             <?php else : ?>
-                                                                <a class="dropdown-item" type="button" href="<?= base_url('konfirmasi_admin/' . $data['tiket'] . '/' . $data['token_admin']) ?>"><i class="fas fa-toggle-on text-secondary"></i>&ensp;Konfirmasi Pengajuan</a>
+                                                                <button class="dropdown-item" type="button" data-toggle="modal" data-target="#confirm_konsultasi" data-tiket="<?= $data['tiket'] ?>" data-admin="<?= $data['token_admin'] ?>"><i class="fas fa-toggle-on text-secondary"></i>&ensp;Konfirmasi Pengajuan</button>
                                                             <?php endif; ?>
                                                             <a class="dropdown-item" type="button" href="<?= base_url('change_status_user/' . $data['id']) ?>"><i class="fas fa-calendar text-secondary"></i>&ensp;Ganti Jadwal</a>
                                                             <?php if ($data['metode'] > 1) : ?>
@@ -152,18 +124,31 @@
             </div>
             <!-- End of Main Content -->
 
-            <!-- Footer -->
-            <footer class="sticky-footer bg-white">
-                <div class="container my-auto">
-                    <div class="copyright text-center my-auto">
-                        <span>Copyright &copy; Your Website 2020</span>
-                    </div>
-                </div>
-            </footer>
-            <!-- End of Footer -->
+            <?= $this->include('\App\Views\admin\template\footer') ?>
 
         </div>
         <!-- End of Content Wrapper -->
+
+        <!-- Modal Aktivasi User-->
+        <div class="modal fade" id="confirm_konsultasi" tabindex="-1" role="dialog" aria-labelledby="confirmModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Konfirmasi Ulang Status User</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <h7 class="modal-title text-justify" id="exampleModalLabel">Apakah anda yakin akan mengubah status user tersebut?</h7>
+                    </div>
+                    <div class="modal-footer">
+                        <a type="button" class="btn btn-secondary" data-dismiss="modal">Batal</a>
+                        <a id="confirm-button" href="#" type="button" class="btn btn-primary">Setuju</a>
+                    </div>
+                </div>
+            </div>
+        </div>
 
     </div>
     <!-- End of Page Wrapper -->
@@ -190,6 +175,20 @@
     <!-- Page level custom scripts -->
     <script src="js/demo/datatables-demo.js"></script>
 
+    <script>
+        $('#confirm_konsultasi').on('show.bs.modal', function(event) {
+            var button = $(event.relatedTarget)
+            var tiket = button.data('tiket')
+            var admin = button.data('admin')
+
+            var modal = $(this)
+            if (admin == "cancel") {
+                modal.find('#confirm-button').attr('href', "<?= base_url('batalkan_pengajuan/') ?>" + tiket);
+            } else {
+                modal.find('#confirm-button').attr('href', "<?= base_url('konfirmasi_pengajuan/') ?>" + tiket + "/" + admin);
+            }
+        })
+    </script>
 </body>
 
 </html>

@@ -32,6 +32,7 @@ class Konsultasi extends BaseController
         $data['token_admin'] = $token_admin;
         $data['konfirmasi_admin'] = 0;
         $data['created_by'] = session('user')['id'];
+        $data['user_pekerjaan'] = $data['pekerjaan'];
 
         // penyiapan no telepon
         $telepon = $data['telepon'];
@@ -43,6 +44,7 @@ class Konsultasi extends BaseController
             $telepon = $telepon;
         }
         $no_user = $telepon;
+        $data['telepon'] = $no_user;
 
         // try catch apabila ada kesalahan saat mengupload ke dalam database
         try {
@@ -87,7 +89,7 @@ Pengajuan telah diterima, mohon ditunggu untuk jadwal konsultasi yang akan diber
             $admin_text = '*PEMBERITAHUAN*' . PHP_EOL .
                 'Kegiatan konsultasi dengan no tiket ' . $token . ' pada tanggal ' . $date . ' dengan sesi ' . $sesi . ' telah diterima' . PHP_EOL .
                 'Klik link berikut untuk melakukan konfirmasi pengajuan konsultasi ' . PHP_EOL . PHP_EOL .
-                base_url('konfirmasi_admin/' . $token . '/' . $token_admin);
+                base_url('konfirmasi_pengajuan/' . $token . '/' . $token_admin);
             $this->pengajuan_wa($message, $admin_text, $no_user);
         } catch (\Throwable $th) {
             // notif wa apabila pengajuan konsultasi gagal dilakukan
@@ -111,6 +113,36 @@ Pengajuan telah diterima, mohon ditunggu untuk jadwal konsultasi yang akan diber
         $data = [
             'kueri' => $query
         ];
+
+        for ($i = 0; $i < count($data['kueri']); $i++) {
+
+            switch ($data['kueri'][$i]['kategori_instansi']) {
+                case '1':
+                    $data['kueri'][$i]['kategori_instansi'] = 'Lembaga Negara';
+                    break;
+                case '2':
+                    $data['kueri'][$i]['kategori_instansi'] = 'Kementerian & Lembaga Pemerintah';
+                    break;
+                case '3':
+                    $data['kueri'][$i]['kategori_instansi'] = 'TNI/Polri/BIN Kejaksaan';
+                    break;
+                case '4':
+                    $data['kueri'][$i]['kategori_instansi'] = 'Pemerintah Daerah';
+                    break;
+                case '5':
+                    $data['kueri'][$i]['kategori_instansi'] = 'Lembaga Internasional';
+                    break;
+                case '6':
+                    $data['kueri'][$i]['kategori_instansi'] = 'Lembaga Penelitian & Pendidikan';
+                    break;
+                case '7':
+                    $data['kueri'][$i]['kategori_instansi'] = 'BUMN/BUMD';
+                    break;
+                default:
+                    $data['kueri'][$i]['kategori_instansi'] = 'Swasta';
+                    break;
+            }
+        }
 
         // sort data konsultasi berdasarkan tanggal konsultasi
         $dates = array_column($data['kueri'], 'tanggal');
@@ -148,6 +180,23 @@ Pengajuan telah diterima, mohon ditunggu untuk jadwal konsultasi yang akan diber
             $model->set('konfirmasi_admin', 1)
                 ->where('tiket', $token)
                 ->where('token_admin', $token_admin)
+                ->update();
+            $alert = "<script>toastr.info('Are you the 6 fingered man?')</script>";
+            session()->setFlashdata('flash', $alert);
+            return redirect()->to(base_url('admin/konsultasi_list'));
+        } catch (\Throwable $th) {
+            echo "Gagal melakukan konfirmasi konsultasi dengan no tiket" . $token;
+            echo $th;
+        }
+    }
+
+    public function batalkan_pengajuan($token)
+    {
+        // konfirmasi dari admin untuk pengajuan konsultasi
+        $model = new \App\Models\KonsultasiModel();
+        try {
+            $model->set('konfirmasi_admin', 0)
+                ->where('tiket', $token)
                 ->update();
             $alert = "<script>toastr.info('Are you the 6 fingered man?')</script>";
             session()->setFlashdata('flash', $alert);

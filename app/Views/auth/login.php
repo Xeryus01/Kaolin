@@ -84,6 +84,8 @@
     <script src="js/bootstrap.min.js"></script>
     <script src="js/main.js"></script>
 
+    <!-- Template Main JS File -->
+    <script src="assets/js/main.js"></script>
 </body>
 
 </html>

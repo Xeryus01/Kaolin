@@ -1,27 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="">
-    <meta name="author" content="">
-
-    <title>SB Admin 2 - Tables</title>
-
-    <!-- Custom fonts for this template -->
-    <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
-    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
-
-    <!-- Custom styles for this template -->
-    <link href="css/sb-admin-2.min.css" rel="stylesheet">
-
-    <!-- Custom styles for this page -->
-    <link href="vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
-
-</head>
+<?= $this->include('\App\Views\admin\template\html') ?>
 
 <body id="page-top">
 
@@ -55,7 +32,7 @@
                                 </div><!-- /.col -->
                                 <div class="col-sm-6">
                                     <ol class="breadcrumb float-sm-right text-sm mr-2">
-                                        <li class="breadcrumb-item"><a href="<?= base_url('admin/index') ?>">Home</a></li>
+                                        <li class="breadcrumb-item"><a href="<?= base_url('admin/index') ?>">Admin</a></li>
                                         <li class="breadcrumb-item text-muted"><span>Users Management</span></li>
                                     </ol>
                                 </div><!-- /.col -->
@@ -74,10 +51,8 @@
                                     <thead>
                                         <tr>
                                             <td>No.</td>
-                                            <td>Username</td>
                                             <td>Email</td>
                                             <td class="text-center">Role</td>
-                                            <td class="text-center">Status</td>
                                             <td class="text-center">Tindakan</td>
                                         </tr>
                                     </thead>
@@ -89,33 +64,21 @@
                                                     <?= $i ?>
                                                 </td>
                                                 <td>
-                                                    <?= $user['username'] ?>
-                                                </td>
-                                                <td>
                                                     <?= $user['secret'] ?>
+                                                </td>
                                                 <td class="text-center">
                                                     <?= $user['group'] ?>
                                                 </td>
                                                 <td class="text-center">
-                                                    <?php if ($user['active'] == 1) : ?>
-                                                        <span class="badge badge-pill badge-primary">Aktif</span>
-                                                    <?php else : ?>
-                                                        <span class="badge badge-pill badge-info">Tidak Aktif</span>
-                                                    <?php endif; ?>
-                                                </td>
-                                                <td class="text-center">
-                                                    <div class="dropleft">
-                                                        <button class="btn btn-xs btn-outline-secondary dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                            <span class="text-xs">Tindakan</span>
-                                                        </button>
-                                                        <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
-                                                            <?php if ($user['active'] == 1) : ?>
-                                                                <a class="dropdown-item" type="button" href="<?= base_url('change_status_user/' . $user['id']) ?>"><i class="fas fa-toggle-off text-secondary"></i>&ensp;Nonaktifkan user</a>
-                                                            <?php else : ?>
-                                                                <a class="dropdown-item" type="button" href="<?= base_url('change_status_user/' . $user['id']) ?>"><i class="fas fa-toggle-on text-secondary"></i>&ensp;Aktifkan user</a>
-                                                            <?php endif; ?>
-                                                            <a class="dropdown-item" type="button" href="<?= base_url('delete_user/' . $user['id']) ?>"><i class="fas fa-trash text-secondary"></i>&ensp;Hapus User</a>
-                                                        </div>
+                                                    <div>
+                                                        <?php if ($user['group'] != 'superadmin') : ?>
+                                                            <button class="btn btn-xs btn-outline-secondary" type="button" data-toggle="modal" data-target="#roleusers" data-id="<?= $user['id'] ?>" data-email="<?= $user['secret'] ?>">
+                                                                <span class="text-xs"><i class="fas fa-user text-secondary"></i>&ensp;Ganti role</span>
+                                                            </button>
+                                                            <!-- <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
+                                                                <button class="dropdown-item" type="button" data-toggle="modal" data-target="#activeusers" data-id="<?= $user['id'] ?>"><i class="fas fa-user text-secondary"></i>&ensp;Ganti role</button>
+                                                            </div> -->
+                                                        <?php endif; ?>
                                                     </div>
                                                 </td>
                                             </tr>
@@ -133,15 +96,41 @@
             </div>
             <!-- End of Main Content -->
 
-            <!-- Footer -->
-            <footer class="sticky-footer bg-white">
-                <div class="container my-auto">
-                    <div class="copyright text-center my-auto">
-                        <span>Copyright &copy; Your Website 2020</span>
+            <!-- Modal Change User Role-->
+            <div class="modal fade" id="roleusers" tabindex="-1" role="dialog" aria-labelledby="activeModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Pengubahan Role</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form id="role-form">
+                                <div class="form-group">
+                                    <label for="user-name" class="col-form-label">User:</label>
+                                    <input type="text" class="form-control" name="user_name" id="user-name" value="" disabled>
+                                </div>
+                                <div class="form-group">
+                                    <label for="role-user" class="col-form-label">Role:</label>
+                                    <select class="form-control" id="role-user" name="role_user">
+                                        <option value="user">user</option>
+                                        <option value="admin">admin</option>
+                                    </select>
+                                </div>
+                                <input type="hidden" class="form-control" name="user_id" id="user_id" value="">
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+                            <button id="confirm-button" type="button" class="btn btn-primary">Setuju</button>
+                        </div>
                     </div>
                 </div>
-            </footer>
-            <!-- End of Footer -->
+            </div>
+
+            <?= $this->include('\App\Views\admin\template\footer') ?>
 
         </div>
         <!-- End of Content Wrapper -->
@@ -171,6 +160,22 @@
     <!-- Page level custom scripts -->
     <script src="js/demo/datatables-demo.js"></script>
 
+    <script>
+        $('#roleusers').on('show.bs.modal', function(event) {
+            var button = $(event.relatedTarget)
+            var id = button.data('id')
+            var email = button.data('email')
+
+            var modal = $(this)
+            modal.find('#user-name').val(email);
+            modal.find('#user_id').val(id);
+            modal.find('#exampleModalLabel').text("Pengubahan Role : " + email);
+        })
+
+        $('#confirm-button').on('click', function(event) {
+            $('#role-form').submit()
+        })
+    </script>
 </body>
 
 </html>

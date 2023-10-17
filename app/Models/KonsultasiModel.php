@@ -8,7 +8,7 @@ class KonsultasiModel extends Model
 {
     protected $table = 'konsultasi';
     protected $allowedFields = [
-        'tiket', 'instansi', 'telepon', 'keperluan', 'tanggal', 'sesi', 'konfirmasi_admin', 'token_admin', 'metode', 'user_konsultasi', 'created_by'
+        'tiket', 'kategori_instansi', 'nama_instansi', 'telepon', 'keperluan', 'tanggal', 'sesi', 'konfirmasi_admin', 'token_admin', 'metode', 'user_konsultasi', 'user_pekerjaan', 'created_by'
     ];
 
     public function getAll()

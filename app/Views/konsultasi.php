@@ -66,41 +66,65 @@
                                 </div>
                             </div>
                         </div>
+
                         <div class="form-row">
-                            <div class="name">Asal Instansi</div>
+                            <div class="name">Pekerjaan</div>
                             <div class="value">
                                 <div class="input-group">
-                                    <input class="input--style-5" type="text" name="instansi" required>
+                                    <div class="rs-select2 js-select-simple select--no-search">
+                                        <select name="pekerjaan" id="pekerjaan" required>
+                                            <option disabled="disabled" selected="selected">Pilih Salah Satu</option>
+                                            <option value="1">Pelajar/Mahasiswa</option>
+                                            <option value="2">Peneliti/Dosen</option>
+                                            <option value="3">ASN/TNI/Polri</option>
+                                            <option value="4">Pegawai BUMN/BUMD</option>
+                                            <option value="5">Pegawai Swasta</option>
+                                            <option value="6">Wiraswasta</option>
+                                        </select>
+                                        <div class="select-dropdown"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="name">Kategori Instansi</div>
+                            <div class="value">
+                                <div class="input-group">
+                                    <div class="rs-select2 js-select-simple select--no-search">
+                                        <select name="kategori_instansi" id="kategori_instansi" required>
+                                            <option disabled="disabled" selected="selected">Pilih Salah Satu</option>
+                                            <option value="1">Lembaga Negara</option>
+                                            <option value="2">Kementerian & Lembaga Pemerintah</option>
+                                            <option value="3">TNI/Polri/BIN Kejaksaan</option>
+                                            <option value="4">Pemerintah Daerah</option>
+                                            <option value="5">Lembaga Internasional</option>
+                                            <option value="6">Lembaga Penelitian & Pendidikan</option>
+                                            <option value="7">BUMN/BUMD</option>
+                                            <option value="8">Swasta</option>
+                                        </select>
+                                        <div class="select-dropdown"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="name">Nama Instansi</div>
+                            <div class="value">
+                                <div class="input-group">
+                                    <input class="input--style-5" type="text" name="nama_instansi" required>
                                 </div>
                             </div>
                         </div>
                         <div class="form-row">
-                            <div class="name">No Telepon</div>
+                            <div class="name">No Whatsapp</div>
                             <div class="value">
                                 <div class="input-group">
                                     <input class="input--style-5" type="text" name="telepon" required>
                                 </div>
                             </div>
                         </div>
-                        <!-- <div class="form-row m-b-55">
-                            <div class="name">No Telepon</div>
-                            <div class="value">
-                                <div class="row row-refine">
-                                    <div class="col-3">
-                                        <div class="input-group-desc">
-                                            <input class="input--style-5" type="text" name="area_code">
-                                            <label class="label--desc">Area Code</label>
-                                        </div>
-                                    </div>
-                                    <div class="col-9">
-                                        <div class="input-group-desc">
-                                            <input class="input--style-5" type="text" name="phone">
-                                            <label class="label--desc">Phone Number</label>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div> -->
                         <div class="form-row">
                             <div class="name">Metode Konsultasi</div>
                             <div class="value">
@@ -130,8 +154,16 @@
                         <hr>
                         <br>
 
-                        <div class="text-center">
-                            <h4>Pengajuan Waktu Konsultasi</h4>
+                        <div>
+                            <div class="text-center">
+                                <u>
+                                    <h4>Pengajuan Waktu Konsultasi</h4>
+                                </u>
+                            </div>
+                            <br>
+                            <div class="text-left">
+                                <h5>Layanan konsultasi hanya akan dilaksanakan pada hari Selasa, Rabu, dan Kamis</h5>
+                            </div>
                             <br>
                         </div>
 
@@ -139,7 +171,7 @@
                             <div class="name">Tanggal Konsultasi</div>
                             <div class="value">
                                 <div class="input-group">
-                                    <input class="input--style-5" type="date" name="tanggal" required>
+                                    <input class="input--style-5" type="date" name="tanggal" id="datepicker" required>
                                 </div>
                             </div>
                         </div>
@@ -151,9 +183,9 @@
                                     <div class="rs-select2 js-select-simple select--no-search">
                                         <select name="sesi" required>
                                             <option disabled="disabled" selected="selected">Choose option</option>
-                                            <option value="I">I (08.30 - 09.10 WIB)</option>
-                                            <option value="II">II (10.00 - 10.40 WIB)</option>
-                                            <option value="III">III (13.30 - 14.10 WIB)</option>
+                                            <option value="I">I (08.30 - 09.05 WIB)</option>
+                                            <option value="II">II (10.00 - 10.35 WIB)</option>
+                                            <option value="III">III (13.30 - 14.05 WIB)</option>
                                         </select>
                                         <div class="select-dropdown"></div>
                                     </div>
@@ -198,6 +230,18 @@
     <!-- Main JS-->
     <script src="js/global.js"></script>
 
+    <!-- Template Main JS File -->
+    <script src="assets/js/main.js"></script>
+
+    <script>
+        $("#datepicker").click(function(e) {
+            e.preventDefault();
+        }).datepicker({
+            beforeShowDay: function(date) {
+                return date.getDay() == 1 ? [false, " disabled"] : [true, " enabled"];
+            }
+        });
+    </script>
 </body><!-- This templates was made by Colorlib (https://colorlib.com) -->
 
 </html>

@@ -23,7 +23,7 @@ class Admin extends BaseController
             'users' => $user_list
         ];
         // dd($data['users']);
-        return view('admin/user', $data);
+        return view('admin/user/user', $data);
     }
 
     public function user_role()
@@ -34,7 +34,7 @@ class Admin extends BaseController
             'users' => $user_list
         ];
         // dd($data['users']);
-        return view('admin/user', $data);
+        return view('admin/user/user_role', $data);
     }
 
     public function konsultasi_list()

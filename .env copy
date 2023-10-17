@@ -21,7 +21,6 @@ CI_ENVIRONMENT = development
 #--------------------------------------------------------------------
 
 app.baseURL = 'http://localhost:8080'
-# app.baseURL = 'https://webapps.bps.go.id/pangkalpinangkota/kaolin'
 appTimezone = 'Asia/Jakarta';
 # If you have trouble with `.`, you could also use `_`.
 # app_baseURL = ''
@@ -39,14 +38,6 @@ database.default.password =
 database.default.DBDriver = MySQLi
 database.default.DBPrefix =
 database.default.port = 3306
-
-# database.default.hostname = localhost
-# database.default.database = bps1971_alldb
-# database.default.username = bps1971_kaolin
-# database.default.password = Kahurip79
-# database.default.DBDriver = MySQLi
-# database.default.DBPrefix = kaolin_
-# database.default.port = 3306
 
 # database.tests.hostname = localhost
 # database.tests.database = ci4_test

@@ -67,12 +67,50 @@
                                 <!-- Card Body -->
                                 <div class="card-body">
                                     <h5 class="card-title text-center" style="font-weight:bold">
-                                        <u><?= $kueri[$i]['instansi'] ?></u>
+                                        <u><?= $kueri[$i]['kategori_instansi'] ?></u>
                                     </h5>
-                                    <br>
-                                    <p class="card-text">Nama &emsp;&emsp;&emsp;: <?= $kueri[$i]['user_konsultasi'] ?></p>
-                                    <p class="card-text">Tanggal &emsp;&emsp;&nbsp;: <?= $kueri[$i]['tanggal'] ?></p>
-                                    <p class="card-text">Keperluan &emsp;: <?= $kueri[$i]['keperluan'] ?></p>
+                                    <h6 class="text-center">
+                                        <?= $kueri[$i]['nama_instansi'] ?>
+                                    </h6>
+                                    <div class="row">
+                                        <p class="card-text">
+                                        <div class="col-3">
+                                            Nama
+                                        </div>
+                                        <div class="col-1">
+                                            :
+                                        </div>
+                                        <div class="col-8">
+                                            <?= $kueri[$i]['user_konsultasi'] ?>
+                                        </div>
+                                        </p>
+                                    </div>
+                                    <div class="row">
+                                        <p class="card-text">
+                                        <div class="col-3">
+                                            Tanggal
+                                        </div>
+                                        <div class="col-1">
+                                            :
+                                        </div>
+                                        <div class="col-8">
+                                            <?= $kueri[$i]['tanggal'] ?>
+                                        </div>
+                                        </p>
+                                    </div>
+                                    <div class="row">
+                                        <p class="card-text">
+                                        <div class="col-3">
+                                            Keperluan
+                                        </div>
+                                        <div class="col-1">
+                                            :
+                                        </div>
+                                        <div class="col-8">
+                                            <?= $kueri[$i]['keperluan'] ?>
+                                        </div>
+                                        </p>
+                                    </div>
                                     <div class="text-center">
                                         <a href="<?= base_url('detail_konsultasi/') . $kueri[$i]['tiket'] ?>" class="btn btn-primary">Detail</a>
                                     </div>

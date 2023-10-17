@@ -23,6 +23,33 @@ class Home extends BaseController
         for ($i = 0; $i < count($data['kueri']); $i++) {
             $time = strtotime($data['kueri'][$i]['tanggal']);
             $data['kueri'][$i]['tanggal'] = date("d-m-Y", $time);
+
+            switch ($data['kueri'][$i]['kategori_instansi']) {
+                case '1':
+                    $data['kueri'][$i]['kategori_instansi'] = 'Lembaga Negara';
+                    break;
+                case '2':
+                    $data['kueri'][$i]['kategori_instansi'] = 'Kementerian & Lembaga Pemerintah';
+                    break;
+                case '3':
+                    $data['kueri'][$i]['kategori_instansi'] = 'TNI/Polri/BIN Kejaksaan';
+                    break;
+                case '4':
+                    $data['kueri'][$i]['kategori_instansi'] = 'Pemerintah Daerah';
+                    break;
+                case '5':
+                    $data['kueri'][$i]['kategori_instansi'] = 'Lembaga Internasional';
+                    break;
+                case '6':
+                    $data['kueri'][$i]['kategori_instansi'] = 'Lembaga Penelitian & Pendidikan';
+                    break;
+                case '7':
+                    $data['kueri'][$i]['kategori_instansi'] = 'BUMN/BUMD';
+                    break;
+                default:
+                    $data['kueri'][$i]['kategori_instansi'] = 'Swasta';
+                    break;
+            }
         }
 
         return view('home', $data);
