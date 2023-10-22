@@ -3,10 +3,10 @@
 
     <!-- Sidebar - Brand -->
     <a class="sidebar-brand d-flex align-items-center justify-content-center" href="<?= base_url(); ?>">
-        <div class="sidebar-brand-icon rotate-n-15">
-            <img src="assets/img/logo.png" alt="">
+        <div class="sidebar-brand-icon logo d-flex align-items-center">
+            <img src="/assets/img/logo-kaolin.png" alt="" style="max-height: 40px; margin-right: 6px;">
+            <div class="sidebar-brand-text mr-3">KAOLIN</div>
         </div>
-        <div class="sidebar-brand-text mx-3">KAOLIN</div>
     </a>
 
     <!-- Divider -->
@@ -52,10 +52,8 @@
             <div class="bg-white py-2 collapse-inner rounded">
                 <h6 class="collapse-header">Konsultasi:</h6>
                 <a class="collapse-item" href="<?= base_url('admin/konsultasi_list'); ?>">Daftar Konsultasi</a>
-                <a class="collapse-item" href="<?= base_url('admin/konsultasi_confirm'); ?>">Konfirmasi Konsultasi</a>
-                <a class="collapse-item" href="<?= base_url('admin/konsultasi_confirm'); ?>">Ganti Jadwal Konsultasi</a>
-                <a class="collapse-item" href="<?= base_url('admin/konsultasi_add_link'); ?>">Tambah Link Konsultasi</a>
-                <a class="collapse-item" href="<?= base_url('admin/konsultasi_delete'); ?>">Hapus Konsultasi</a>
+                <!-- <a class="collapse-item" href="<?= base_url('admin/konsultasi_jadwal'); ?>">Ganti Jadwal Konsultasi</a>
+                <a class="collapse-item" href="<?= base_url('admin/konsultasi_add_link'); ?>">Tambah Link Konsultasi</a> -->
             </div>
         </div>
     </li>

@@ -6,8 +6,8 @@
             <div class="row gy-4">
                 <div class="col-lg-5 col-md-12 footer-info">
                     <a href="index.html" class="logo d-flex align-items-center">
-                        <img src="assets/img/logo.png" alt="">
-                        <span>FlexStart</span>
+                        <img src="assets/img/logo-kaolin.png" alt="">
+                        <span>Kaolin</span>
                     </a>
                     <p>Cras fermentum odio eu feugiat lide par naso tierra. Justo eget nada terra videa magna derita valies darta donna mare fermentum iaculis eu non diam phasellus.</p>
                     <div class="social-links mt-3">
@@ -19,25 +19,25 @@
                 </div>
 
                 <div class="col-lg-2 col-6 footer-links">
-                    <h4>Useful Links</h4>
+                    <!-- <h4>Useful Links</h4>
                     <ul>
                         <li><i class="bi bi-chevron-right"></i> <a href="#">Home</a></li>
                         <li><i class="bi bi-chevron-right"></i> <a href="#">About us</a></li>
                         <li><i class="bi bi-chevron-right"></i> <a href="#">Services</a></li>
                         <li><i class="bi bi-chevron-right"></i> <a href="#">Terms of service</a></li>
                         <li><i class="bi bi-chevron-right"></i> <a href="#">Privacy policy</a></li>
-                    </ul>
+                    </ul> -->
                 </div>
 
                 <div class="col-lg-2 col-6 footer-links">
-                    <h4>Our Services</h4>
+                    <!-- <h4>Our Services</h4>
                     <ul>
                         <li><i class="bi bi-chevron-right"></i> <a href="#">Web Design</a></li>
                         <li><i class="bi bi-chevron-right"></i> <a href="#">Web Development</a></li>
                         <li><i class="bi bi-chevron-right"></i> <a href="#">Product Management</a></li>
                         <li><i class="bi bi-chevron-right"></i> <a href="#">Marketing</a></li>
                         <li><i class="bi bi-chevron-right"></i> <a href="#">Graphic Design</a></li>
-                    </ul>
+                    </ul> -->
                 </div>
 
                 <div class="col-lg-3 col-md-12 footer-contact text-center text-md-start">
@@ -61,10 +61,6 @@
             &copy; Copyright <strong><span>BPS Kota Pangkalpinang</span></strong>. All Rights Reserved
         </div>
         <div class="credits">
-            <!-- All the links in the footer should remain intact. -->
-            <!-- You can delete the links only if you purchased the pro version. -->
-            <!-- Licensing information: https://bootstrapmade.com/license/ -->
-            <!-- Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/flexstart-bootstrap-startup-template/ -->
             Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
         </div>
     </div>

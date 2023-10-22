@@ -190,7 +190,7 @@
             var id = button.data('id')
 
             var modal = $(this)
-            modal.find('#confirm-button').attr('href', "<?= base_url('change_status_user/') ?>" + id);
+            modal.find('#confirm-button').attr('href', "<?= base_url('admin/change_status_user/') ?>" + id);
         })
 
         $('#deleteusers').on('show.bs.modal', function(event) {
@@ -198,7 +198,7 @@
             var id = button.data('id')
 
             var modal = $(this)
-            modal.find('#confirm-button').attr('href', "<?= base_url('delete_user/') ?>" + id);
+            modal.find('#confirm-button').attr('href', "<?= base_url('admin/delete_user/') ?>" + id);
         })
     </script>
 </body>

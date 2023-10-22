@@ -17,6 +17,18 @@ class KonsultasiModel extends Model
         return $this->builder()->getWhere(['tanggal >=' => $now])->getResultArray();
     }
 
+    public function getByTicket($tiket)
+    {
+        return $this->builder()->getWhere(['tiket' => $tiket])->getResultArray();
+    }
+
+    public function getDetail($id)
+    {
+        $query = $this->builder()
+            ->join('konsultasi_zoom', 'konsultasi_zoom.konsultasi_id = konsultasi.id');
+        return $query->getWhere(['konsultasi.id' => $id])->getResultArray();
+    }
+
     public function getByUser($id)
     {
         return $this->builder()->getWhere(['created_by' => $id])->getResultArray();

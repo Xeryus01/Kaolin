@@ -4,20 +4,6 @@
 <!doctype html>
 <html lang="en">
 
-<!-- <head>
-    <meta charset="utf-8">
-    <meta content="width=device-width, initial-scale=1.0" name="viewport">
-
-    <meta content="" name="description">
-    <meta content="" name="keywords">
-
-    <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700&display=swap" rel="stylesheet">
-
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-<link href="assets/img/favicon.png" rel="icon">
-<link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon">
-</head> -->
-
 <head>
     <!-- Required meta tags-->
     <meta charset="UTF-8">
@@ -45,14 +31,41 @@
     <link href="assets/css/style.css" rel="stylesheet">
     <link href="css/main.css" rel="stylesheet" media="all">
 
+    <!-- Favicons -->
+    <link href="assets/img/logo-bps.png" rel="icon">
+    <link href="assets/img/logo-bps.png" rel="apple-touch-icon">
 </head>
 
 <body>
-    <?= $this->include('\App\Views\template\auth\header_auth') ?>
+    <!-- ======= Header ======= -->
+    <header id="header" class="header fixed-top">
+        <div class="container-fluid container-xl d-flex align-items-center justify-content-between">
+
+            <a href="<?= base_url(); ?>" class="logo d-flex align-items-center">
+                <img src="assets/img/logo-kaolin.png" alt="">
+                <span>KAOLIN</span>
+            </a>
+
+            <nav id="navbar" class="navbar">
+                <ul>
+                    <?php $user = auth()->user();
+                    if ($user != null) : ?>
+                        <li><a class="getstarted scrollto" href="<?= base_url('my_menu') ?>" style="background-color:#ffc107">Konsultasi Saya</a></li>
+                        <li><a class="getstarted scrollto" href="<?= base_url('admin/index') ?>" style="background-color:#28a745">Menu Admin</a></li>
+                        <li><a class="getstarted scrollto" href="<?= base_url('logout') ?>">Logout</a></li>
+                    <?php else : ?>
+                        <li><a class="getstarted scrollto" href="<?= base_url('login') ?>">Login</a></li>
+                    <?php endif; ?>
+
+                </ul>
+                <i class="bi bi-list mobile-nav-toggle"></i>
+            </nav><!-- .navbar -->
+        </div>
+    </header><!-- End Header -->
 
     <div class="page-wrapper bg-gra-03 p-t-45 p-b-50">
         <div class="wrapper wrapper--w790">
-            <div class="card card-5">
+            <div class="card card-5 mt-4">
                 <div class="card-heading">
                     <h2 class="title">Form Pengajuan Konsultasi</h2>
                 </div>
@@ -214,6 +227,9 @@
             </div>
         </div>
     </div>
+
+    <?= $this->include('\App\Views\template\footer') ?>
+
     <?= session()->flash; ?>
 
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>

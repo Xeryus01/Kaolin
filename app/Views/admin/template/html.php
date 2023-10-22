@@ -9,7 +9,11 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>SB Admin 2 - Tables</title>
+    <title>KAOLIN - BPS Kota Pangkalpinang</title>
+
+    <!-- Favicons -->
+    <link href="/assets/img/logo-bps.png" rel="icon">
+    <link href="/assets/img/logo-bps.png" rel="apple-touch-icon">
 
     <!-- Custom fonts for this template -->
     <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">

@@ -45,6 +45,6 @@ class UserModel extends Model
             auth_identities.secret')
             ->join('auth_groups_users', 'auth_groups_users.user_id = users.id')
             ->join('auth_identities', 'auth_identities.user_id = users.id');
-        return $query->getWhere(['users.id' => $id])->getResultArray();
+        return $query->getWhere(['users.id' => $id, 'auth_identities.type' => 'email_password'])->getResultArray();
     }
 }

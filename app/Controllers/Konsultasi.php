@@ -207,8 +207,187 @@ Pengajuan telah diterima, mohon ditunggu untuk jadwal konsultasi yang akan diber
         }
     }
 
-    public function reschedule_pengajuan()
+    public function detail_konsultasi()
     {
-        // penggantian jadwal dari admin untuk kegiatan konsultasi yang perlu direschedule
+        // session()->get()['user']['id'];
+
+        date_default_timezone_set("Asia/Jakarta");
+        $model = new \App\Models\KonsultasiModel();
+
+        // get semua konsultasi
+        $query = $model->getAll();
+
+        $data = [
+            'kueri' => $query
+        ];
+
+        for ($i = 0; $i < count($data['kueri']); $i++) {
+            $time = strtotime($data['kueri'][$i]['tanggal']);
+            $data['kueri'][$i]['tanggal'] = date("d-m-Y", $time);
+
+            switch ($data['kueri'][$i]['kategori_instansi']) {
+                case '1':
+                    $data['kueri'][$i]['kategori_instansi'] = 'Lembaga Negara';
+                    break;
+                case '2':
+                    $data['kueri'][$i]['kategori_instansi'] = 'Kementerian & Lembaga Pemerintah';
+                    break;
+                case '3':
+                    $data['kueri'][$i]['kategori_instansi'] = 'TNI/Polri/BIN Kejaksaan';
+                    break;
+                case '4':
+                    $data['kueri'][$i]['kategori_instansi'] = 'Pemerintah Daerah';
+                    break;
+                case '5':
+                    $data['kueri'][$i]['kategori_instansi'] = 'Lembaga Internasional';
+                    break;
+                case '6':
+                    $data['kueri'][$i]['kategori_instansi'] = 'Lembaga Penelitian & Pendidikan';
+                    break;
+                case '7':
+                    $data['kueri'][$i]['kategori_instansi'] = 'BUMN/BUMD';
+                    break;
+                default:
+                    $data['kueri'][$i]['kategori_instansi'] = 'Swasta';
+                    break;
+            }
+        }
+
+        return view('detail', $data);
+        // // konfirmasi dari admin untuk pengajuan konsultasi
+        // $model = new \App\Models\KonsultasiModel();
+        // $konsultasi = $model->getByTicket($tiket);
+        // // $konsultasi[0]['link'] = "";
+        // if ($konsultasi[0]['metode'] == 3) {
+        //     $konsultasi[0]['link'] = $model->getDetail($konsultasi[0]['id'])[0];
+        // } else {
+        //     $konsultasi[0]['link'] = null;
+        // }
+        // $user_id = session()->get()['user']['id'];
+        // $query = $model->getByUser($user_id);
+
+        // $data = [
+        //     'kueri' => $query
+        // ];
+
+
+        // return view('detail');
+    }
+
+    // public function detail(): string
+    // {
+    //     // session()->get()['user']['id'];
+    //     $data = $this->request->getVar();
+    //     // dd($data);
+    //     date_default_timezone_set("Asia/Jakarta");
+    //     $model = new \App\Models\KonsultasiModel();
+
+    //     // get semua konsultasi
+    //     $query = $model->getAll();
+
+    //     $data = [
+    //         'kueri' => $query
+    //     ];
+
+    //     for ($i = 0; $i < count($data['kueri']); $i++) {
+    //         $time = strtotime($data['kueri'][$i]['tanggal']);
+    //         $data['kueri'][$i]['tanggal'] = date("d-m-Y", $time);
+
+    //         switch ($data['kueri'][$i]['kategori_instansi']) {
+    //             case '1':
+    //                 $data['kueri'][$i]['kategori_instansi'] = 'Lembaga Negara';
+    //                 break;
+    //             case '2':
+    //                 $data['kueri'][$i]['kategori_instansi'] = 'Kementerian & Lembaga Pemerintah';
+    //                 break;
+    //             case '3':
+    //                 $data['kueri'][$i]['kategori_instansi'] = 'TNI/Polri/BIN Kejaksaan';
+    //                 break;
+    //             case '4':
+    //                 $data['kueri'][$i]['kategori_instansi'] = 'Pemerintah Daerah';
+    //                 break;
+    //             case '5':
+    //                 $data['kueri'][$i]['kategori_instansi'] = 'Lembaga Internasional';
+    //                 break;
+    //             case '6':
+    //                 $data['kueri'][$i]['kategori_instansi'] = 'Lembaga Penelitian & Pendidikan';
+    //                 break;
+    //             case '7':
+    //                 $data['kueri'][$i]['kategori_instansi'] = 'BUMN/BUMD';
+    //                 break;
+    //             default:
+    //                 $data['kueri'][$i]['kategori_instansi'] = 'Swasta';
+    //                 break;
+    //         }
+    //     }
+
+    //     return view('detail', $data);
+    // }
+
+    public function feedback_konsultasi()
+    {
+        // session()->get()['user']['id'];
+
+        date_default_timezone_set("Asia/Jakarta");
+        $model = new \App\Models\KonsultasiModel();
+
+        // get semua konsultasi
+        $query = $model->getAll();
+
+        $data = [
+            'kueri' => $query
+        ];
+
+        for ($i = 0; $i < count($data['kueri']); $i++) {
+            $time = strtotime($data['kueri'][$i]['tanggal']);
+            $data['kueri'][$i]['tanggal'] = date("d-m-Y", $time);
+
+            switch ($data['kueri'][$i]['kategori_instansi']) {
+                case '1':
+                    $data['kueri'][$i]['kategori_instansi'] = 'Lembaga Negara';
+                    break;
+                case '2':
+                    $data['kueri'][$i]['kategori_instansi'] = 'Kementerian & Lembaga Pemerintah';
+                    break;
+                case '3':
+                    $data['kueri'][$i]['kategori_instansi'] = 'TNI/Polri/BIN Kejaksaan';
+                    break;
+                case '4':
+                    $data['kueri'][$i]['kategori_instansi'] = 'Pemerintah Daerah';
+                    break;
+                case '5':
+                    $data['kueri'][$i]['kategori_instansi'] = 'Lembaga Internasional';
+                    break;
+                case '6':
+                    $data['kueri'][$i]['kategori_instansi'] = 'Lembaga Penelitian & Pendidikan';
+                    break;
+                case '7':
+                    $data['kueri'][$i]['kategori_instansi'] = 'BUMN/BUMD';
+                    break;
+                default:
+                    $data['kueri'][$i]['kategori_instansi'] = 'Swasta';
+                    break;
+            }
+        }
+
+        return view('detail', $data);
+        // // konfirmasi dari admin untuk pengajuan konsultasi
+        // $model = new \App\Models\KonsultasiModel();
+        // $konsultasi = $model->getByTicket($tiket);
+        // // $konsultasi[0]['link'] = "";
+        // if ($konsultasi[0]['metode'] == 3) {
+        //     $konsultasi[0]['link'] = $model->getDetail($konsultasi[0]['id'])[0];
+        // } else {
+        //     $konsultasi[0]['link'] = null;
+        // }
+        // $user_id = session()->get()['user']['id'];
+        // $query = $model->getByUser($user_id);
+
+        // $data = [
+        //     'kueri' => $query
+        // ];
+
+
+        // return view('detail');
     }
 }

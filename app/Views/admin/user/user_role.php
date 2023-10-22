@@ -107,7 +107,7 @@
                             </button>
                         </div>
                         <div class="modal-body">
-                            <form id="role-form">
+                            <form action="<?= base_url("admin/user_change_role/") ?>" id="role-form" method="post">
                                 <div class="form-group">
                                     <label for="user-name" class="col-form-label">User:</label>
                                     <input type="text" class="form-control" name="user_name" id="user-name" value="" disabled>
