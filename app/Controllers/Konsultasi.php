@@ -21,10 +21,8 @@ class Konsultasi extends BaseController
         $model = new \App\Models\KonsultasiModel();
 
         // generate token konsultasi
-        $length = 6;
-        $str = '1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZabcefghijklmnopqrstuvwxyz';
-        $token =  substr(str_shuffle($str), 0, $length);
-        $token_admin =  substr(str_shuffle($str), 0, $length);
+        $token =  generate_token();
+        $token_admin =  generate_token();
 
         // pengambilan data hasil form konsultasi dan penyiapan data yang dimasukan database
         $data = $this->request->getPost();
@@ -35,15 +33,7 @@ class Konsultasi extends BaseController
         $data['user_pekerjaan'] = $data['pekerjaan'];
 
         // penyiapan no telepon
-        $telepon = $data['telepon'];
-        if (substr($telepon, 0, 2) == "08") {
-            $telepon = '+62' . substr($telepon, 1, strlen($telepon));
-        } elseif (substr($telepon, 0, 2) == "62") {
-            $telepon = '+62' . substr($telepon, 2, strlen($telepon));
-        } else {
-            $telepon = $telepon;
-        }
-        $no_user = $telepon;
+        $no_user = standardize_phone_number($data['telepon']);
         $data['telepon'] = $no_user;
 
         // try catch apabila ada kesalahan saat mengupload ke dalam database
@@ -52,32 +42,10 @@ class Konsultasi extends BaseController
             $model->insert($data);
 
             // notif wa apabila pengajuan konsultasi berhasil dilakukan
-            switch ($data['metode']) {
-                case '1':
-                    $metode = 'Offline';
-                    break;
-                case '2':
-                    $metode = 'Online (Whatsapp)';
-                    break;
-                default:
-                    $metode = 'Online (Zoom)';
-                    break;
-            }
 
-            switch ($data['sesi']) {
-                case 'I':
-                    $sesi = 'I (08.30 - 09.10 WIB)';
-                    break;
-                case 'II':
-                    $sesi = 'II (10.00 - 10.40 WIB)';
-                    break;
-                default:
-                    $sesi = 'III (13.30 - 14.10 WIB)';
-                    break;
-            }
-
-            $date = strtotime($data['tanggal']);
-            $date = date("d-m-Y", $date);
+            $metode = standardize_metode($data['metode']);
+            $sesi = standardize_sesi($data['sesi']);
+            $date = indonesian_date($data['tanggal']);
 
             $message =
                 'Pengajuan konsultasi dengan detail sebagai berikut
@@ -90,6 +58,8 @@ Pengajuan telah diterima, mohon ditunggu untuk jadwal konsultasi yang akan diber
                 'Kegiatan konsultasi dengan no tiket ' . $token . ' pada tanggal ' . $date . ' dengan sesi ' . $sesi . ' telah diterima' . PHP_EOL .
                 'Klik link berikut untuk melakukan konfirmasi pengajuan konsultasi ' . PHP_EOL . PHP_EOL .
                 base_url('konfirmasi_pengajuan/' . $token . '/' . $token_admin);
+
+            notif_wa($message, $no_user);
             $this->pengajuan_wa($message, $admin_text, $no_user);
         } catch (\Throwable $th) {
             // notif wa apabila pengajuan konsultasi gagal dilakukan
@@ -114,62 +84,16 @@ Pengajuan telah diterima, mohon ditunggu untuk jadwal konsultasi yang akan diber
             'kueri' => $query
         ];
 
+
         for ($i = 0; $i < count($data['kueri']); $i++) {
-
-            switch ($data['kueri'][$i]['kategori_instansi']) {
-                case '1':
-                    $data['kueri'][$i]['kategori_instansi'] = 'Lembaga Negara';
-                    break;
-                case '2':
-                    $data['kueri'][$i]['kategori_instansi'] = 'Kementerian & Lembaga Pemerintah';
-                    break;
-                case '3':
-                    $data['kueri'][$i]['kategori_instansi'] = 'TNI/Polri/BIN Kejaksaan';
-                    break;
-                case '4':
-                    $data['kueri'][$i]['kategori_instansi'] = 'Pemerintah Daerah';
-                    break;
-                case '5':
-                    $data['kueri'][$i]['kategori_instansi'] = 'Lembaga Internasional';
-                    break;
-                case '6':
-                    $data['kueri'][$i]['kategori_instansi'] = 'Lembaga Penelitian & Pendidikan';
-                    break;
-                case '7':
-                    $data['kueri'][$i]['kategori_instansi'] = 'BUMN/BUMD';
-                    break;
-                default:
-                    $data['kueri'][$i]['kategori_instansi'] = 'Swasta';
-                    break;
-            }
+            $data['kueri'][$i]['itanggal'] = indonesian_date($data['kueri'][$i]['tanggal']);
+            $data['kueri'][$i]['kategori_instansi'] = standardize_instansi($data['kueri'][$i]['kategori_instansi']);
         }
-
         // sort data konsultasi berdasarkan tanggal konsultasi
         $dates = array_column($data['kueri'], 'tanggal');
         array_multisort($dates, SORT_ASC, $data['kueri']);
 
         return view('my_menu', $data);
-    }
-
-    public function pengajuan_wa($text, $admin_text, $no_user)
-    {
-        // persiapan no hp kaolin dan api_key
-        $no_admin = '+62895345599400';
-        $apikey = '3a9DzEE5TkQf';
-
-        $url_user = 'http://api.textmebot.com/send.php?recipient=' . $no_user . '&apikey=' . $apikey . '&text=' . urlencode($text) . '&json=yes';
-        $url_admin = 'http://api.textmebot.com/send.php?recipient=' . $no_admin . '&apikey=' . $apikey . '&text=' . urlencode($admin_text) . '&json=yes';
-
-        $ch = curl_init($url_user);
-        $result = curl_exec($ch);
-
-        if ($admin_text != false)
-            if ($result) {
-                sleep(8);
-                curl_setopt($ch, CURLOPT_URL, $url_admin);
-                $result = curl_exec($ch);
-            }
-        curl_close($ch);
     }
 
     public function konfirmasi_pengajuan($token, $token_admin)
@@ -181,8 +105,17 @@ Pengajuan telah diterima, mohon ditunggu untuk jadwal konsultasi yang akan diber
                 ->where('tiket', $token)
                 ->where('token_admin', $token_admin)
                 ->update();
-            $alert = "<script>toastr.info('Are you the 6 fingered man?')</script>";
-            session()->setFlashdata('flash', $alert);
+
+            // notifikasi WA konfirmasi pengajuan
+            $konsultasi = $model->getByTicket($token);
+            $tanggal = indonesian_date(date("Y-m-d H:i:s"));
+
+            $message =
+                'Pengajuan konsultasi Anda dengan No tiket ' . $token . ' telah dikonfirmasi oleh Admin pada ' . $tanggal . '.' . PHP_EOL . '
+Mohon ditunggu hingga jadwal yang telah disetujui.';
+            $admin_text = 'Pengajuan konsultasi dengan No tiket ' . $token . ' telah dikonfirmasi oleh Admin pada ' . $tanggal . '.';
+            $this->pengajuan_wa($message, $admin_text, $konsultasi[0]['telepon']);
+
             return redirect()->to(base_url('admin/konsultasi_list'));
         } catch (\Throwable $th) {
             echo "Gagal melakukan konfirmasi konsultasi dengan no tiket" . $token;
@@ -198,8 +131,17 @@ Pengajuan telah diterima, mohon ditunggu untuk jadwal konsultasi yang akan diber
             $model->set('konfirmasi_admin', 0)
                 ->where('tiket', $token)
                 ->update();
-            $alert = "<script>toastr.info('Are you the 6 fingered man?')</script>";
-            session()->setFlashdata('flash', $alert);
+
+            // notifikasi WA konfirmasi pengajuan
+            $konsultasi = $model->getByTicket($token);
+            $tanggal = indonesian_date(date("Y-m-d H:i:s"));
+
+            $message =
+                'Pengajuan konsultasi Anda dengan No tiket ' . $token . ' telah dibatalkan oleh Admin pada ' . $tanggal . '.' . PHP_EOL . '
+    Mohon ditunggu hingga pemberitahuan lebih lanjut atau ajukan konsultasi baru.';
+            $admin_text = 'Pengajuan konsultasi dengan No tiket ' . $token . ' telah berhasil dibatalkan pada ' . $tanggal . '.';
+            $this->pengajuan_wa($message, $admin_text, $konsultasi[0]['telepon']);
+
             return redirect()->to(base_url('admin/konsultasi_list'));
         } catch (\Throwable $th) {
             echo "Gagal melakukan konfirmasi konsultasi dengan no tiket" . $token;
@@ -209,185 +151,172 @@ Pengajuan telah diterima, mohon ditunggu untuk jadwal konsultasi yang akan diber
 
     public function detail_konsultasi()
     {
-        // session()->get()['user']['id'];
-
-        date_default_timezone_set("Asia/Jakarta");
         $model = new \App\Models\KonsultasiModel();
+        $tiket = $_GET['tiket'];
+        $konsultasi = $model->getByTicket($tiket);
+        $id = $konsultasi[0]['id'];
+        $metode = $konsultasi[0]['metode'];
 
-        // get semua konsultasi
-        $query = $model->getAll();
+        $konsultasi[0]['link'] = null;
+        $konsultasi[0]['bukti'] = null;
 
-        $data = [
-            'kueri' => $query
-        ];
-
-        for ($i = 0; $i < count($data['kueri']); $i++) {
-            $time = strtotime($data['kueri'][$i]['tanggal']);
-            $data['kueri'][$i]['tanggal'] = date("d-m-Y", $time);
-
-            switch ($data['kueri'][$i]['kategori_instansi']) {
-                case '1':
-                    $data['kueri'][$i]['kategori_instansi'] = 'Lembaga Negara';
-                    break;
-                case '2':
-                    $data['kueri'][$i]['kategori_instansi'] = 'Kementerian & Lembaga Pemerintah';
-                    break;
-                case '3':
-                    $data['kueri'][$i]['kategori_instansi'] = 'TNI/Polri/BIN Kejaksaan';
-                    break;
-                case '4':
-                    $data['kueri'][$i]['kategori_instansi'] = 'Pemerintah Daerah';
-                    break;
-                case '5':
-                    $data['kueri'][$i]['kategori_instansi'] = 'Lembaga Internasional';
-                    break;
-                case '6':
-                    $data['kueri'][$i]['kategori_instansi'] = 'Lembaga Penelitian & Pendidikan';
-                    break;
-                case '7':
-                    $data['kueri'][$i]['kategori_instansi'] = 'BUMN/BUMD';
-                    break;
-                default:
-                    $data['kueri'][$i]['kategori_instansi'] = 'Swasta';
-                    break;
+        if ($metode == 3) {
+            if (isset($model->getLink($id)[0])) {
+                $konsultasi[0]['link'] = $model->getLink($id)[0];
+                if (isset($model->getBukti($id, $metode)[0])) {
+                    $konsultasi[0]['bukti'] = $model->getBukti($id, $metode)[0];
+                }
+            }
+        } else {
+            if (isset($model->getBukti($id, $metode)[0])) {
+                $konsultasi[0]['bukti'] = $model->getBukti($id, $metode)[0];
             }
         }
+        $konsultasi[0]['sesi'] = standardize_sesi($konsultasi[0]['sesi']);
+        if ($konsultasi[0]['konfirmasi_admin'] == 0) {
+            $konsultasi[0]['konfirmasi_admin'] = "Belum Dikonfirmasi";
+        } else {
+            $konsultasi[0]['konfirmasi_admin'] = "Sudah Dikonfirmasi";
+        }
+        $data = $konsultasi[0];
+        $data['tanggal'] = indonesian_date($data['tanggal']);
 
         return view('detail', $data);
-        // // konfirmasi dari admin untuk pengajuan konsultasi
-        // $model = new \App\Models\KonsultasiModel();
-        // $konsultasi = $model->getByTicket($tiket);
-        // // $konsultasi[0]['link'] = "";
-        // if ($konsultasi[0]['metode'] == 3) {
-        //     $konsultasi[0]['link'] = $model->getDetail($konsultasi[0]['id'])[0];
-        // } else {
-        //     $konsultasi[0]['link'] = null;
-        // }
-        // $user_id = session()->get()['user']['id'];
-        // $query = $model->getByUser($user_id);
-
-        // $data = [
-        //     'kueri' => $query
-        // ];
-
-
-        // return view('detail');
     }
 
-    // public function detail(): string
-    // {
-    //     // session()->get()['user']['id'];
-    //     $data = $this->request->getVar();
-    //     // dd($data);
-    //     date_default_timezone_set("Asia/Jakarta");
-    //     $model = new \App\Models\KonsultasiModel();
+    public function my_detail()
+    {
+        $model = new \App\Models\KonsultasiModel();
+        $tiket = $_GET['tiket'];
+        $konsultasi = $model->getByTicket($tiket);
+        $id = $konsultasi[0]['id'];
+        $metode = $konsultasi[0]['metode'];
 
-    //     // get semua konsultasi
-    //     $query = $model->getAll();
+        $konsultasi[0]['link'] = null;
+        $konsultasi[0]['bukti'] = null;
 
-    //     $data = [
-    //         'kueri' => $query
-    //     ];
+        if ($metode == 3) {
+            if (isset($model->getLink($id)[0])) {
+                $konsultasi[0]['link'] = $model->getLink($id)[0];
+                if (isset($model->getBukti($id, $metode)[0])) {
+                    $konsultasi[0]['bukti'] = $model->getBukti($id, $metode)[0];
+                }
+            }
+        } else {
+            if (isset($model->getBukti($id, $metode)[0])) {
+                $konsultasi[0]['bukti'] = $model->getBukti($id, $metode)[0];
+            }
+        }
+        $konsultasi[0]['sesi'] = standardize_sesi($konsultasi[0]['sesi']);
+        if ($konsultasi[0]['konfirmasi_admin'] == 0) {
+            $konsultasi[0]['konfirmasi_admin'] = "Belum Dikonfirmasi";
+        } else {
+            $konsultasi[0]['konfirmasi_admin'] = "Sudah Dikonfirmasi";
+        }
+        $data = $konsultasi[0];
+        $data['tanggal'] = indonesian_date($data['tanggal']);
 
-    //     for ($i = 0; $i < count($data['kueri']); $i++) {
-    //         $time = strtotime($data['kueri'][$i]['tanggal']);
-    //         $data['kueri'][$i]['tanggal'] = date("d-m-Y", $time);
-
-    //         switch ($data['kueri'][$i]['kategori_instansi']) {
-    //             case '1':
-    //                 $data['kueri'][$i]['kategori_instansi'] = 'Lembaga Negara';
-    //                 break;
-    //             case '2':
-    //                 $data['kueri'][$i]['kategori_instansi'] = 'Kementerian & Lembaga Pemerintah';
-    //                 break;
-    //             case '3':
-    //                 $data['kueri'][$i]['kategori_instansi'] = 'TNI/Polri/BIN Kejaksaan';
-    //                 break;
-    //             case '4':
-    //                 $data['kueri'][$i]['kategori_instansi'] = 'Pemerintah Daerah';
-    //                 break;
-    //             case '5':
-    //                 $data['kueri'][$i]['kategori_instansi'] = 'Lembaga Internasional';
-    //                 break;
-    //             case '6':
-    //                 $data['kueri'][$i]['kategori_instansi'] = 'Lembaga Penelitian & Pendidikan';
-    //                 break;
-    //             case '7':
-    //                 $data['kueri'][$i]['kategori_instansi'] = 'BUMN/BUMD';
-    //                 break;
-    //             default:
-    //                 $data['kueri'][$i]['kategori_instansi'] = 'Swasta';
-    //                 break;
-    //         }
-    //     }
-
-    //     return view('detail', $data);
-    // }
+        return view('my_detail', $data);
+    }
 
     public function feedback_konsultasi()
     {
-        // session()->get()['user']['id'];
-
-        date_default_timezone_set("Asia/Jakarta");
         $model = new \App\Models\KonsultasiModel();
+        $data = $this->request->getPost();
 
-        // get semua konsultasi
-        $query = $model->getAll();
-
-        $data = [
-            'kueri' => $query
+        $token = $data['tiket'];
+        $user_id = session()->get()['user']['id'];
+        $konsultasi = $model->getByTicket($token)[0];
+        if (!isset($data['saran_masukan'])) {
+            $data['saran_masukan'] = null;
+        }
+        $insert = [
+            "konsultasi_id" => $konsultasi['id'],
+            "konsultasi_user" => $user_id,
+            "kepuasan" => $data['kepuasanOptions'],
+            "kemudahan" => $data['kemudahanOptions'],
+            "feedback" => $data['saran_masukan']
         ];
 
-        for ($i = 0; $i < count($data['kueri']); $i++) {
-            $time = strtotime($data['kueri'][$i]['tanggal']);
-            $data['kueri'][$i]['tanggal'] = date("d-m-Y", $time);
+        $query = $model->db
+            ->table('feedback')
+            ->upsert($insert);
 
-            switch ($data['kueri'][$i]['kategori_instansi']) {
-                case '1':
-                    $data['kueri'][$i]['kategori_instansi'] = 'Lembaga Negara';
-                    break;
-                case '2':
-                    $data['kueri'][$i]['kategori_instansi'] = 'Kementerian & Lembaga Pemerintah';
-                    break;
-                case '3':
-                    $data['kueri'][$i]['kategori_instansi'] = 'TNI/Polri/BIN Kejaksaan';
-                    break;
-                case '4':
-                    $data['kueri'][$i]['kategori_instansi'] = 'Pemerintah Daerah';
-                    break;
-                case '5':
-                    $data['kueri'][$i]['kategori_instansi'] = 'Lembaga Internasional';
-                    break;
-                case '6':
-                    $data['kueri'][$i]['kategori_instansi'] = 'Lembaga Penelitian & Pendidikan';
-                    break;
-                case '7':
-                    $data['kueri'][$i]['kategori_instansi'] = 'BUMN/BUMD';
-                    break;
-                default:
-                    $data['kueri'][$i]['kategori_instansi'] = 'Swasta';
-                    break;
-            }
+        try {
+            $query;
+            return redirect()->to(base_url('my_menu'));
+        } catch (\Throwable $th) {
+            echo "Gagal melakukan penambahan bukti konsultasi";
+            echo $th;
+        }
+    }
+
+    public function pengajuan_wa($text, $admin_text, $no_user)
+    {
+        // persiapan no hp kaolin dan api_key
+        $no_admin = '0895345599400';
+        $apikey = 'ucFi3Q_prntULc6XWb6x';
+
+        $curl = curl_init();
+
+        // Pesan WA Admin
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => 'https://api.fonnte.com/send',
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => '',
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 0,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => 'POST',
+            CURLOPT_POSTFIELDS => array(
+                'target' => $no_admin,
+                'message' => $admin_text,
+                'countryCode' => '62', //optional
+            ),
+            CURLOPT_HTTPHEADER => array(
+                'Authorization: ' . $apikey //change TOKEN to your actual token
+            ),
+        ));
+
+        $response = curl_exec($curl);
+        if (curl_errno($curl)) {
+            $error_msg = curl_error($curl);
         }
 
-        return view('detail', $data);
-        // // konfirmasi dari admin untuk pengajuan konsultasi
-        // $model = new \App\Models\KonsultasiModel();
-        // $konsultasi = $model->getByTicket($tiket);
-        // // $konsultasi[0]['link'] = "";
-        // if ($konsultasi[0]['metode'] == 3) {
-        //     $konsultasi[0]['link'] = $model->getDetail($konsultasi[0]['id'])[0];
-        // } else {
-        //     $konsultasi[0]['link'] = null;
-        // }
-        // $user_id = session()->get()['user']['id'];
-        // $query = $model->getByUser($user_id);
+        if (isset($error_msg)) {
+            echo $error_msg;
+        }
 
-        // $data = [
-        //     'kueri' => $query
-        // ];
+        // Pesan WA Pengguna
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => 'https://api.fonnte.com/send',
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => '',
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 0,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => 'POST',
+            CURLOPT_POSTFIELDS => array(
+                'target' => $no_user,
+                'message' => $text,
+                'countryCode' => '62', //optional
+            ),
+            CURLOPT_HTTPHEADER => array(
+                'Authorization: ' . $apikey //change TOKEN to your actual token
+            ),
+        ));
 
+        $response = curl_exec($curl);
+        if (curl_errno($curl)) {
+            $error_msg = curl_error($curl);
+        }
 
-        // return view('detail');
+        if (isset($error_msg)) {
+            echo $error_msg;
+        }
+
+        curl_close($curl);
     }
 }

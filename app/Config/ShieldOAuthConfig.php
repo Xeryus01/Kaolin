@@ -39,8 +39,13 @@ class ShieldOAuthConfig extends OAuthConfig
         //     'allow_login' => true,
         // ],
         'google' => [
-            'client_id'     => '860421267678-4oljeqd3skavdv8lb934sl53288ab4er.apps.googleusercontent.com',
-            'client_secret' => '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',
+            // // webapps
+            // 'client_id'     => '860421267678-4oljeqd3skavdv8lb934sl53288ab4er.apps.googleusercontent.com',
+            // 'client_secret' => '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',
+
+            // localhost
+            'client_id'     => '860421267678-gnj7bk9mrcifb98dm4qbdcj17nheli7j.apps.googleusercontent.com',
+            'client_secret' => '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',
 
             'allow_login' => true,
         ],

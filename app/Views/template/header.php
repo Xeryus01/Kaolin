@@ -18,9 +18,14 @@
                 <?php $user = auth()->user();
                 if ($user != null) : ?>
                     <li><a class="getstarted scrollto" href="<?= base_url('my_menu') ?>" style="background-color:#ffc107">Konsultasi Saya</a></li>
-                    <li><a class="getstarted scrollto" href="<?= base_url('admin/index') ?>" style="background-color:#28a745">Menu Admin</a></li>
+                    <?php
+                    $group = auth()->user()->getGroups()[0];
+                    if ($group == 'admin' || $group == 'superadmin') :  ?>
+                        <li><a class="getstarted scrollto" href="<?= base_url('admin/index') ?>" style="background-color:#28a745">Menu Admin</a></li>
+                    <?php endif; ?>
                     <li><a class="getstarted scrollto" href="<?= base_url('logout') ?>">Logout</a></li>
                 <?php else : ?>
+                    <!-- <li><a class="nav-link scrollto" href="<?= base_url('#faq') ?>">Panduan</a></li> -->
                     <li><a class="getstarted scrollto" href="<?= base_url('login') ?>">Login</a></li>
                 <?php endif; ?>
 

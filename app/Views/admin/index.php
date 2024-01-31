@@ -18,7 +18,7 @@
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
 
-                    <!-- ATAS DIISI DASHBOAR JUMLAH USER AKTIF DAN JUMLAH KONSULTASI YANG SUDAH DIAJUKAN -->
+                    <!-- ATAS DIISI DASHBOARD JUMLAH USER AKTIF DAN JUMLAH KONSULTASI YANG SUDAH DIAJUKAN -->
                     <!-- ISI DENGAN FITUR ADMIN YANG DISEDIAKAN -->
 
 
@@ -46,7 +46,12 @@
                                                         <div class="col mr-2">
                                                             <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
                                                                 Admin</div>
-                                                            <div class="h3 mb-0 font-weight-bold text-gray-800">3</div>
+                                                            <div class="h3 mb-0 font-weight-bold text-gray-800"><?php
+                                                                                                                if (isset($count_user['admin'])) {
+                                                                                                                    echo ($count_user['admin'] + 1);
+                                                                                                                } else {
+                                                                                                                    echo ('0');
+                                                                                                                } ?></div>
                                                         </div>
                                                         <div class="col-auto">
                                                             <i class="fas fa-user-secret fa-2x text-gray-300"></i>
@@ -64,7 +69,12 @@
                                                         <div class="col mr-2">
                                                             <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
                                                                 Pengguna</div>
-                                                            <div class="h3 mb-0 font-weight-bold text-gray-800">10</div>
+                                                            <div class="h3 mb-0 font-weight-bold text-gray-800"><?php
+                                                                                                                if (isset($count_user['user'])) {
+                                                                                                                    echo ($count_user['user']);
+                                                                                                                } else {
+                                                                                                                    echo ('0');
+                                                                                                                } ?></div>
                                                         </div>
                                                         <div class="col-auto">
                                                             <i class="fas fa-users fa-2x text-gray-300"></i>
@@ -201,8 +211,61 @@
 
     <!-- Page level custom scripts -->
     <script src="js/demo/chart-area-demo.js"></script>
-    <script src="js/demo/chart-pie-demo.js"></script>
 
+    <script>
+        // Set new default font family and font color to mimic Bootstrap's default styling
+        Chart.defaults.global.defaultFontFamily = 'Nunito', '-apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif';
+        Chart.defaults.global.defaultFontColor = '#858796';
+
+        // Pie Chart Example
+        var ctx = document.getElementById("myPieChart");
+        var myPieChart = new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                labels: ["Offline", "Online (Zoom)", "Online (Whatsapp)"],
+                datasets: [{
+                    data: [
+                        <?php
+                        if (isset($count_konsultasi['1'])) {
+                            echo ($count_konsultasi['1'] . ', ');
+                        } else {
+                            echo ('0, ');
+                        }
+                        if (isset($count_konsultasi['2'])) {
+                            echo ($count_konsultasi['2'] . ', ');
+                        } else {
+                            echo ('0, ');
+                        }
+                        if (isset($count_konsultasi['3'])) {
+                            echo ($count_konsultasi['3']);
+                        } else {
+                            echo ('0');
+                        } ?>
+                    ],
+                    backgroundColor: ['#4e73df', '#1cc88a', '#36b9cc'],
+                    hoverBackgroundColor: ['#2e59d9', '#17a673', '#2c9faf'],
+                    hoverBorderColor: "rgba(234, 236, 244, 1)",
+                }],
+            },
+            options: {
+                maintainAspectRatio: false,
+                tooltips: {
+                    backgroundColor: "rgb(255,255,255)",
+                    bodyFontColor: "#858796",
+                    borderColor: '#dddfeb',
+                    borderWidth: 1,
+                    xPadding: 15,
+                    yPadding: 15,
+                    displayColors: false,
+                    caretPadding: 10,
+                },
+                legend: {
+                    display: false
+                },
+                cutoutPercentage: 80,
+            },
+        });
+    </script>
 </body>
 
 </html>

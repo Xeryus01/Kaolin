@@ -91,17 +91,25 @@
                                                         </button>
                                                         <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
                                                             <button class="dropdown-item" type="button" data-toggle="modal" data-target="#detail_konsultasi" data-tiket="<?= $data['tiket'] ?>"><i class="fas fa-info text-secondary"></i>&ensp;Detail</button>
+
                                                             <?php if ($data['konfirmasi_admin'] == 1) : ?>
                                                                 <button class="dropdown-item" type="button" data-toggle="modal" data-target="#confirm_konsultasi" data-tiket="<?= $data['tiket'] ?>" data-admin="cancel"><i class="fas fa-toggle-off text-secondary"></i>&ensp;Batalkan Konfirmasi</button>
                                                             <?php else : ?>
                                                                 <button class="dropdown-item" type="button" data-toggle="modal" data-target="#confirm_konsultasi" data-tiket="<?= $data['tiket'] ?>" data-admin="<?= $data['token_admin'] ?>"><i class="fas fa-toggle-on text-secondary"></i>&ensp;Konfirmasi Pengajuan</button>
                                                             <?php endif; ?>
-                                                            <button class="dropdown-item" type="button" data-toggle="modal" data-target="#jadwal_konsultasi" data-tiket="<?= $data['tiket'] ?>" data-jadwal="<?= $data['tanggal'] ?>" data-sesi="<?= $data['sesi'] ?>"><i class="fas fa-calendar text-secondary"></i>&ensp;Ganti Jadwal</button>
-                                                            <?php if ($data['metode'] == "Online (Zoom)") : ?>
-                                                                <button class="dropdown-item" type="button" data-toggle="modal" data-target="#link_konsultasi" data-tiket="<?= $data['tiket'] ?>" data-link="<?= $data['tiket'] ?>"><i class="fas fa-link text-secondary"></i>&ensp;Tambah Link</button>
+
+                                                            <?php if ($data['metode'] != "Online (Whatsapp)") : ?>
+                                                                <button class="dropdown-item" type="button" data-toggle="modal" data-target="#jadwal_konsultasi" data-tiket="<?= $data['tiket'] ?>" data-jadwal="<?= $data['tanggal'] ?>" data-sesi="<?= $data['sesi'] ?>"><i class="fas fa-calendar text-secondary"></i>&ensp;Ganti Jadwal</button>
                                                             <?php endif; ?>
+
+                                                            <?php if ($data['metode'] == "Online (Zoom)") : ?>
+                                                                <button class="dropdown-item" type="button" data-toggle="modal" data-target="#link_konsultasi" data-tiket="<?= $data['tiket'] ?>"><i class="fas fa-link text-secondary"></i>&ensp;Tambah Link</button>
+                                                            <?php endif; ?>
+
                                                             <button class="dropdown-item" type="button" data-toggle="modal" data-target="#bukti_konsultasi" data-tiket="<?= $data['tiket'] ?>" data-link="<?= $data['tiket'] ?>"><i class="fas fa-file text-secondary"></i>&ensp;Tambah Bukti Konsultasi</button>
+
                                                             <button class="dropdown-item" type="button" data-toggle="modal" data-target="#delete_konsultasi" data-tiket="<?= $data['tiket'] ?>" data-link="<?= $data['tiket'] ?>"><i class="fas fa-trash text-secondary"></i>&ensp;Hapus Pengajuan</button>
+
                                                         </div>
                                                     </div>
                                                 </td>
@@ -137,10 +145,10 @@
                     </div>
                     <div class="modal-body">
                         <!-- <h7 class="modal-title text-justify" id="detailModalLabel"></h7> -->
-                        <h3 class="card-title text-center" style="font-weight:bold">
+                        <h3 class="card-title text-center" style="font-weight:bold" id="lembaga">
                             <u>Lembaga Penelitian & Pendidikan</u>
                         </h3>
-                        <h4 class="text-center">
+                        <h4 class="text-center" id="nama_lembaga">
                             Politeknik Statistika STIS
                         </h4>
                         <br>
@@ -154,7 +162,7 @@
                             <div class="col-1">
                                 :
                             </div>
-                            <div class="col-7">
+                            <div class="col-7" id="no_tiket">
                                 BpGFST
                             </div>
                             </p>
@@ -182,7 +190,7 @@
                             <div class="col-1">
                                 :
                             </div>
-                            <div class="col-7">
+                            <div class="col-7" id="nama_pembuat">
                                 Akhmad Fadil Mubarok
                             </div>
                             </p>
@@ -197,7 +205,7 @@
                             <div class="col-1">
                                 :
                             </div>
-                            <div class="col-7">
+                            <div class="col-7" id="pekerjaan_pembuat">
                                 Pelajar/Mahasiswa
                             </div>
                             </p>
@@ -212,7 +220,7 @@
                             <div class="col-1">
                                 :
                             </div>
-                            <div class="col-7">
+                            <div class="col-7" id="notelp_pembuat">
                                 +6282226602929
                             </div>
                             </p>
@@ -241,7 +249,7 @@
                             <div class="col-1">
                                 :
                             </div>
-                            <div class="col-7">
+                            <div class="col-7" id="tanggal_konsultasi">
                                 27 October 2023
                             </div>
                             </p>
@@ -256,7 +264,7 @@
                             <div class="col-1">
                                 :
                             </div>
-                            <div class="col-7">
+                            <div class="col-7" id="sesi_konsultasi">
                                 III (13.30 - 14.10 WIB)
                             </div>
                             </p>
@@ -271,7 +279,7 @@
                             <div class="col-1">
                                 :
                             </div>
-                            <div class="col-7">
+                            <div class="col-7" id="metode_konsultasi">
                                 Online (Zoom)
                             </div>
                             </p>
@@ -286,7 +294,7 @@
                             <div class="col-1">
                                 :
                             </div>
-                            <div class="col-7" style="text-align: justify;">
+                            <div class="col-7" style="text-align: justify;" id="keperluan_konsultasi">
                                 Konsultasi Permintaan Data Skripsi Kemiskinan dan Tingkat Pengangguran Terbuka Kota Pangkalpinang
                             </div>
                             </p>
@@ -301,7 +309,7 @@
                             <div class="col-1">
                                 :
                             </div>
-                            <div class="col-7">
+                            <div class="col-7" id="konfirmasi_konsultasi">
                                 Sudah Dikonfirmasi
                             </div>
                             </p>
@@ -317,7 +325,7 @@
                                 :
                             </div>
                             <div class="col-7">
-                                <a href="https://us02web.zoom.us/j/89260576330?pwd=bjdHR3hwWFlSeU93bFJJWnNNZkR4dz09">
+                                <a id="link_detail" href="https://us02web.zoom.us/j/89260576330?pwd=bjdHR3hwWFlSeU93bFJJWnNNZkR4dz09">
                                     <span class="badge badge-pill badge-primary">zoom link</span>
                                 </a>
                             </div>
@@ -333,8 +341,11 @@
                             <div class="col-1">
                                 :
                             </div>
-                            <div class="col-7">
-                                <a type="button" href="https://drive.google.com/file/d/1ADatgIIsYzLdi3OP_jsm98q8cKNht8oC/view?usp=share_link"><i class="fas fa-file text-secondary"></i>&ensp; Bukti Konsultasi</a>
+                            <div class="col-7" id="bukti_detail">
+                                <a id="link_detail" href="https://us02web.zoom.us/j/89260576330?pwd=bjdHR3hwWFlSeU93bFJJWnNNZkR4dz09">
+                                    <span class="badge badge-pill badge-success">Bukti konsultasi</span>
+                                </a>
+                                <!-- <a type="button" href="https://drive.google.com/file/d/1ADatgIIsYzLdi3OP_jsm98q8cKNht8oC/view?usp=share_link"><i class="fas fa-file text-secondary"></i>&ensp; Bukti Konsultasi</a> -->
                             </div>
                             </p>
                         </div>
@@ -431,8 +442,8 @@
                                 <input type="text" class="form-control" name="tiket_konsultasi" id="tiket-name" value="" disabled>
                             </div>
                             <div class="form-group">
-                                <label for="link_konsultasi" class="col-form-label">Link Konsultasi:</label>
-                                <input type="text" class="form-control" name="link_konsultasi" id="link_konsultasi">
+                                <label for="link" class="col-form-label">Link Konsultasi:</label>
+                                <input type="text" class="form-control" name="link" id="link">
                             </div>
                             <input type="hidden" class="form-control" name="tiket" id="tiket">
                         </form>
@@ -533,26 +544,33 @@
                 },
                 function(data) {
                     json = JSON.parse(data)
-                    // .forEach(el => {
-                    //     $('#kabkota').append(`
-                    //     <option id="${el['id_kabkota']}" value="${el['nama_kabkota']}">${el['nama_kabkota']}</option>
-                    //     `)
-                    // });
-                    console.log(json)
 
-                    // $('#kabkota').val(kab)
-                    // $('#kab-hidden').val($('#kabkota').val())
+                    var modal = $('#detail_konsultasi')
+                    modal.find('#lembaga').text(json.kategori_instansi)
+                    modal.find('#nama_lembaga').text(json.nama_instansi)
+                    modal.find('#no_tiket').text(json.tiket)
+                    modal.find('#nama_pembuat').text(json.user_konsultasi)
+                    modal.find('#pekerjaan_pembuat').text(json.konsultasi_pekerjaan)
+                    modal.find('#notelp_pembuat').text(json.telepon)
+                    modal.find('#tanggal_konsultasi').text(json.tanggal)
+                    modal.find('#sesi_konsultasi').text(json.sesi)
+                    modal.find('#metode_konsultasi').text(json.nama_metode)
+                    modal.find('#keperluan_konsultasi').text(json.keperluan)
+                    modal.find('#bukti_detail').text(json.tiket)
+                    if (json.konfirmasi_admin == 1) {
+                        modal.find('#konfirmasi_konsultasi').text("Sudah Dikonfirmasi")
+                    } else {
+                        modal.find('#konfirmasi_konsultasi').text("Belum Dikonfirmasi")
+                    }
+                    if (json.link != null) {
+                        modal.find('#link_detail').attr('href', json.link.link);
+                        modal.find('#link_detail span').text('Zoom link');
+                    } else {
+                        modal.find('#link_detail').attr('href', "#");
+                        modal.find('#link_detail span').text('Belum terdapat link zoom');
+                    }
                 },
             );
-
-            // var modal = $(this)
-            // if (admin == "cancel") {
-            //     modal.find('#detail-button').attr('href', "<?= base_url('batalkan_pengajuan/') ?>" + tiket);
-            //     modal.find('#detailModalLabel').text("Apakah anda yakin untuk membatalkan konfirmasi konsultasi tersebut?")
-            // } else {
-            //     modal.find('#detail-button').attr('href', "<?= base_url('konfirmasi_pengajuan/') ?>" + tiket + "/" + admin);
-            //     modal.find('#detailModalLabel').text("Apakah anda yakin untuk menyetujui konfirmasi konsultasi tersebut?")
-            // }
         })
 
         // konfirmasi konsultasi
@@ -577,18 +595,18 @@
             var tiket = button.data('tiket')
             var jadwal = button.data('jadwal')
             var sesi = button.data('sesi')
-            var date = jadwal.split("-")
-            date = new Date(date[2], date[1] - 1, date[0]);
-            jadwal = date.toLocaleString('default', {
-                weekday: "long",
-                year: "numeric",
-                month: "long",
-                day: "numeric",
-            })
+            // var date = jadwal.split("-")
+            // date = new Date(date[2], date[1] - 1, date[0]);
+            // jadwal = date.toLocaleString('default', {
+            //     weekday: "long",
+            //     year: "numeric",
+            //     month: "long",
+            //     day: "numeric",
+            // })
 
             var modal = $(this)
             modal.find('#tiket-name').val(tiket);
-            modal.find('#jadwal_konsultasi').val(jadwal + ". Sesi " + sesi);
+            modal.find('#jadwal_konsultasi').val(jadwal + " [Sesi " + sesi + "]");
             modal.find('#tiket').val(tiket);
         })
 
@@ -611,19 +629,18 @@
             $('#link-form').submit()
         })
 
-        // penambahan link konsultasi
+        // penambahan bukti konsultasi
         $('#bukti_konsultasi').on('show.bs.modal', function(event) {
             var button = $(event.relatedTarget)
             var tiket = button.data('tiket')
-            var link = button.data('link')
 
             var modal = $(this)
             modal.find('#tiket-name').val(tiket);
             modal.find('#tiket').val(tiket);
         })
 
-        $('#link-button').on('click', function(event) {
-            $('#link-form').submit()
+        $('#bukti-button').on('click', function(event) {
+            $('#bukti-form').submit()
         })
     </script>
 </body>

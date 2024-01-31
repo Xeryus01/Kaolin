@@ -4,7 +4,7 @@
     <!-- Sidebar - Brand -->
     <a class="sidebar-brand d-flex align-items-center justify-content-center" href="<?= base_url(); ?>">
         <div class="sidebar-brand-icon logo d-flex align-items-center">
-            <img src="/assets/img/logo-kaolin.png" alt="" style="max-height: 40px; margin-right: 6px;">
+            <img src="<?= base_url('/assets/img/logo-kaolin.png') ?>" alt="" style="max-height: 40px; margin-right: 6px;">
             <div class="sidebar-brand-text mr-3">KAOLIN</div>
         </div>
     </a>

@@ -26,6 +26,8 @@
     <link href="vendor/datepicker/daterangepicker.css" rel="stylesheet" media="all">
     <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 
+    <link href="assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+
     <!-- Main CSS-->
     <!-- <link rel="stylesheet" href="css/style.css"> -->
     <link href="assets/css/style.css" rel="stylesheet">
@@ -34,6 +36,7 @@
     <!-- Favicons -->
     <link href="assets/img/logo-bps.png" rel="icon">
     <link href="assets/img/logo-bps.png" rel="apple-touch-icon">
+
 </head>
 
 <body>
@@ -51,7 +54,11 @@
                     <?php $user = auth()->user();
                     if ($user != null) : ?>
                         <li><a class="getstarted scrollto" href="<?= base_url('my_menu') ?>" style="background-color:#ffc107">Konsultasi Saya</a></li>
-                        <li><a class="getstarted scrollto" href="<?= base_url('admin/index') ?>" style="background-color:#28a745">Menu Admin</a></li>
+                        <?php
+                        $group = auth()->user()->getGroups()[0];
+                        if ($group == 'admin' || $group == 'superadmin') :  ?>
+                            <li><a class="getstarted scrollto" href="<?= base_url('admin/index') ?>" style="background-color:#28a745">Menu Admin</a></li>
+                        <?php endif; ?>
                         <li><a class="getstarted scrollto" href="<?= base_url('logout') ?>">Logout</a></li>
                     <?php else : ?>
                         <li><a class="getstarted scrollto" href="<?= base_url('login') ?>">Login</a></li>
@@ -63,7 +70,7 @@
         </div>
     </header><!-- End Header -->
 
-    <div class="page-wrapper bg-gra-03 p-t-45 p-b-50">
+    <div class="page-wrapper p-t-45 p-b-50">
         <div class="wrapper wrapper--w790">
             <div class="card card-5 mt-4">
                 <div class="card-heading">
@@ -164,63 +171,52 @@
                             </div>
                         </div>
 
-                        <hr>
-                        <br>
+                        <div id="hide">
 
-                        <div>
-                            <div class="text-center">
-                                <u>
-                                    <h4>Pengajuan Waktu Konsultasi</h4>
-                                </u>
-                            </div>
+                            <hr>
                             <br>
-                            <div class="text-left">
-                                <h5>Layanan konsultasi hanya akan dilaksanakan pada hari Selasa, Rabu, dan Kamis</h5>
-                            </div>
-                            <br>
-                        </div>
 
-                        <div class="form-row">
-                            <div class="name">Tanggal Konsultasi</div>
-                            <div class="value">
-                                <div class="input-group">
-                                    <input class="input--style-5" type="date" name="tanggal" id="datepicker" required>
+                            <div>
+                                <div class="text-center">
+                                    <u>
+                                        <h4>Pengajuan Waktu Konsultasi</h4>
+                                    </u>
+                                </div>
+                                <br>
+                                <div class="text-left zoom">
+                                    <h5>Layanan konsultasi hanya akan dilaksanakan pada hari Selasa, Rabu, dan Kamis</h5>
+                                </div>
+                                <div class="text-left offline">
+                                    <h5>Layanan konsultasi hanya dapat dilaksanakan pada jam kerja</h5>
+                                </div>
+                                <br>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="name">Tanggal Konsultasi</div>
+                                <div class="value">
+                                    <div class="input-group">
+                                        <input class="input--style-5" type="date" name="tanggal" id="datepicker">
+                                    </div>
                                 </div>
                             </div>
-                        </div>
 
-                        <div class="form-row">
-                            <div class="name">Sesi Konsultasi</div>
-                            <div class="value">
-                                <div class="input-group">
-                                    <div class="rs-select2 js-select-simple select--no-search">
-                                        <select name="sesi" required>
-                                            <option disabled="disabled" selected="selected">Choose option</option>
-                                            <option value="I">I (08.30 - 09.05 WIB)</option>
-                                            <option value="II">II (10.00 - 10.35 WIB)</option>
-                                            <option value="III">III (13.30 - 14.05 WIB)</option>
-                                        </select>
-                                        <div class="select-dropdown"></div>
+                            <div class="form-row">
+                                <div class="name">Sesi Konsultasi</div>
+                                <div class="value">
+                                    <div class="input-group">
+                                        <div class="rs-select2 js-select-simple select--no-search">
+                                            <select name="sesi" id="sesi_konsultasi">
+                                            </select>
+                                            <div class="select-dropdown"></div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
 
-                        <!-- <div class="form-row p-t-20">
-                            <label class="label label--block">Are you an existing customer?</label>
-                            <div class="p-t-15">
-                                <label class="radio-container m-r-55">Yes
-                                    <input type="radio" checked="checked" name="exist">
-                                    <span class="checkmark"></span>
-                                </label>
-                                <label class="radio-container">No
-                                    <input type="radio" name="exist">
-                                    <span class="checkmark"></span>
-                                </label>
-                            </div>
-                        </div> -->
-                        <div>
-                            <button class="btn btn--radius-2 btn--red" type="submit">Submit</button>
+                        <div class="text-center">
+                            <button class="btn btn--radius-2 btn--green float-right" type="submit">Submit</button>
                         </div>
                     </form>
                 </div>
@@ -250,12 +246,45 @@
     <script src="assets/js/main.js"></script>
 
     <script>
-        $("#datepicker").click(function(e) {
-            e.preventDefault();
-        }).datepicker({
-            beforeShowDay: function(date) {
-                return date.getDay() == 1 ? [false, " disabled"] : [true, " enabled"];
-            }
+        var form = $('#hide');
+        form.hide();
+        var select = $("#metode");
+        select.change(function() {
+            if (select.val() !== '2') {
+                form.show();
+                if (select.val() == '1') {
+                    $(".zoom").hide();
+                    $(".offline").show();
+
+                    // penggantian pilihan opsi
+                    var el = $("#sesi_konsultasi");
+                    el.empty(); // remove options
+                    var newOptions = {
+                        "Pagi (08.00 - 12.00 WIB)": "V",
+                        "Siang (12.00 - 16.00 WIB)": "VI"
+                    };
+                    $.each(newOptions, function(key, value) {
+                        el.append($("<option></option>")
+                            .attr("value", value).text(key));
+                    });
+                } else {
+                    $(".offline").hide();
+                    $(".zoom").show();
+
+                    // penggantian pilihan opsi
+                    var el = $("#sesi_konsultasi");
+                    el.empty(); // remove options
+                    var newOptions = {
+                        "Sesi I (08.30 - 09.05 WIB)": "I",
+                        "Sesi II (10.00 - 10.35 WIB)": "II",
+                        "Sesi III (13.30 - 14.05 WIB)": "II"
+                    };
+                    $.each(newOptions, function(key, value) {
+                        el.append($("<option></option>")
+                            .attr("value", value).text(key));
+                    });
+                }
+            } else form.hide();
         });
     </script>
 </body><!-- This templates was made by Colorlib (https://colorlib.com) -->

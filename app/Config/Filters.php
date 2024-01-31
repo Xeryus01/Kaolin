@@ -38,7 +38,7 @@ class Filters extends BaseConfig
             // 'honeypot',
             // 'csrf',
             // 'invalidchars',
-            'session' => ['except' => ['/', 'login*', 'register', 'auth/a/*', 'oauth*']],
+            'session' => ['except' => ['/', 'login*', 'register', 'auth/a/*', 'oauth*', 'detail_konsultasi*']],
         ],
         'after' => [
             'toolbar',
@@ -67,5 +67,7 @@ class Filters extends BaseConfig
      * Example:
      * 'isLoggedIn' => ['before' => ['account/*', 'profiles/*']]
      */
-    public array $filters = [];
+    public array $filters = [
+        'group:admin,superadmin'  => ['before' => ['admin/*', 'konfirmasi_pengajuan/*', 'batalkan_pengajuan/*']],
+    ];
 }

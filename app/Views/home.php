@@ -9,7 +9,15 @@
         <div class="row">
             <div class="col-lg-6 d-flex flex-column justify-content-center">
                 <h1 data-aos="fade-up">Kaolin</h1>
+                <p data-aos="fade-up">
+                    (Konsultasi Asyik Offline dan Online)
+                </p>
+
                 <h2 data-aos="fade-up" data-aos-delay="400">Mari melakukan konsultasi statistik yang asyik dan seru dengan BPS Kota Pangkalpinang</h2>
+                <br>
+                <p style="color: #2359b9; font-size: 1rem;" data-aos="fade-up" data-aos-delay="400">
+                    Jadwal konsultasi : setiap jam kerja, kecuali <b>Zoom</b> setiap Selasa, Rabu, Kamis
+                </p>
                 <div data-aos="fade-up" data-aos-delay="600">
                     <div class="text-center text-lg-start">
                         <a href="<?= base_url('pengajuan_konsultasi'); ?>" class="btn-get-started scrollto d-inline-flex align-items-center justify-content-center align-self-center">
@@ -37,7 +45,7 @@
                 <div class="col-lg-6 d-flex flex-column justify-content-center" data-aos="fade-up" data-aos-delay="200">
                     <div class="content">
                         <h3>Apa itu Kaolin?</h3>
-                        <h2>Kaolin merupakan sistem informasi untuk penjadwalan konsultasi BPS Kota Pangkalpinang</h2>
+                        <h2>Kaolin merupakan sistem informasi untuk penjadwalan dan konsultasi di BPS Kota Pangkalpinang</h2>
                         <p>
                             Kaolin dapat digunakan oleh masyarakat umum, baik Organisasi Perangkat Daerah (OPD) maupun Mahasiswa untuk mengajukan jadwal konsultasi data maupun konsultasi statistik dengan BPS Kota Pangkalpinang.
                         </p>
@@ -45,7 +53,24 @@
                 </div>
 
                 <div class="col-lg-6 d-flex align-items-center" data-aos="zoom-out" data-aos-delay="200">
-                    <img src="assets/img/about.jpg" class="img-fluid" alt="">
+                    <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
+                        <div class="carousel-indicators">
+                            <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+                            <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
+                            <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3"></button>
+                        </div>
+                        <div class="carousel-inner">
+                            <div class="carousel-item active" data-bs-interval="10000">
+                                <img src="img/FGD_PKP.jpg" class="img-fluid d-block w-100" alt="">
+                            </div>
+                            <div class="carousel-item" data-bs-interval="10000">
+                                <img src="img/FGD_PKP-2.jpg" class="img-fluid d-block w-100" alt="">
+                            </div>
+                            <div class="carousel-item" data-bs-interval="10000">
+                                <img src="img/FGD_PKP-3.jpg" class="img-fluid d-block w-100" alt="">
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
             </div>
@@ -60,7 +85,6 @@
 
             <header class="section-header">
                 <p>Fitur yang Disediakan</p>
-                <!-- <p>Odit est perspiciatis laborum et dicta</p> -->
             </header>
 
             <div class="row">
@@ -104,7 +128,6 @@
             <header class="section-header">
                 <p>Jadwal Konsultasi</p>
                 <br>
-                <!-- <h2>cek jadwal konsultasi ke depannya ya..</h2> -->
             </header>
 
             <div class="row" data-aos="fade-up" data-aos-delay="100">
@@ -117,18 +140,18 @@
                         for ($i = $month_num; $i < $month_num + 4; $i++) :
                             $month_name = date('F', mktime(0, 0, 0, $i, 10)); ?>
                             <li data-filter=".filter-<?= $month_name . "-" . $year ?>"><?= $month_name . " " . $year; ?></li>
-                            <!-- <li data-filter=".filter-oktober-2023">Oktober 2023</li> -->
                         <?php endfor; ?>
                     </ul>
                 </div>
             </div>
             <div class="row portfolio-container" data-aos="fade-up" data-aos-delay="200">
                 <?php for ($i = 0; $i < count($kueri); $i++) :
-                    $month = date('F', strtotime($kueri[$i]['tanggal'])); ?>
-                    <div class="col-xl-4 col-lg-4 portfolio-item filter-<?= $month ?>-2023">
+                    $month = date('F', strtotime($kueri[$i]['tanggal']));
+                    $year = date("Y"); ?>
+                    <div class="col-xl-4 col-lg-4 portfolio-item filter-<?= $month ?>-<?= $year ?>">
                         <div class="card shadow mb-4">
                             <!-- Card Body -->
-                            <div class="card-body">
+                            <div class="card-body list-konsultasi">
                                 <h5 class="card-title text-center" style="font-weight:bold">
                                     <u><?= $kueri[$i]['kategori_instansi'] ?></u>
                                 </h5>
@@ -157,7 +180,7 @@
                                         :
                                     </div>
                                     <div class="col-8">
-                                        <?= $kueri[$i]['tanggal'] ?>
+                                        <?= $kueri[$i]['itanggal'] ?>
                                     </div>
                                     </p>
                                 </div>
@@ -219,12 +242,12 @@
                         <div class="accordion-item">
                             <h2 class="accordion-header">
                                 <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq-content-1">
-                                    Non consectetur a erat nam at lectus urna duis?
+                                    Siapa saja yang bisa mengajukan konsultasi statistik melalui Kaolin?
                                 </button>
                             </h2>
                             <div id="faq-content-1" class="accordion-collapse collapse" data-bs-parent="#faqlist1">
                                 <div class="accordion-body">
-                                    Feugiat pretium nibh ipsum consequat. Tempus iaculis urna id volutpat lacus laoreet non curabitur gravida. Venenatis lectus magna fringilla urna porttitor rhoncus dolor purus non.
+                                    Semua masyarakat umum, termasuk OPD dan mahasiswa, dapat mengajukan permintaan konsultasi statistik melalui Kaolin.
                                 </div>
                             </div>
                         </div>
@@ -232,25 +255,12 @@
                         <div class="accordion-item">
                             <h2 class="accordion-header">
                                 <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq-content-2">
-                                    Feugiat scelerisque varius morbi enim nunc faucibus a pellentesque?
+                                    Apakah pelayanan konsultasi statistik melalui Kaolin berbayar?
                                 </button>
                             </h2>
                             <div id="faq-content-2" class="accordion-collapse collapse" data-bs-parent="#faqlist1">
                                 <div class="accordion-body">
-                                    Dolor sit amet consectetur adipiscing elit pellentesque habitant morbi. Id interdum velit laoreet id donec ultrices. Fringilla phasellus faucibus scelerisque eleifend donec pretium. Est pellentesque elit ullamcorper dignissim. Mauris ultrices eros in cursus turpis massa tincidunt dui.
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="accordion-item">
-                            <h2 class="accordion-header">
-                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq-content-3">
-                                    Dolor sit amet consectetur adipiscing elit pellentesque habitant morbi?
-                                </button>
-                            </h2>
-                            <div id="faq-content-3" class="accordion-collapse collapse" data-bs-parent="#faqlist1">
-                                <div class="accordion-body">
-                                    Eleifend mi in nulla posuere sollicitudin aliquam ultrices sagittis orci. Faucibus pulvinar elementum integer enim. Sem nulla pharetra diam sit amet nisl suscipit. Rutrum tellus pellentesque eu tincidunt. Lectus urna duis convallis convallis tellus. Urna molestie at elementum eu facilisis sed odio morbi quis
+                                    <b>Tidak</b>, permintaan konsultasi statistik melalui Kaolin tidak dipungut biaya sepeserpun <b>(GRATIS)</b>.
                                 </div>
                             </div>
                         </div>
@@ -266,12 +276,12 @@
                         <div class="accordion-item">
                             <h2 class="accordion-header">
                                 <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq2-content-1">
-                                    Ac odio tempor orci dapibus. Aliquam eleifend mi in nulla?
+                                    Apa saja akses konsultasi yang disediakan melalui Kaolin?
                                 </button>
                             </h2>
                             <div id="faq2-content-1" class="accordion-collapse collapse" data-bs-parent="#faqlist2">
                                 <div class="accordion-body">
-                                    Dolor sit amet consectetur adipiscing elit pellentesque habitant morbi. Id interdum velit laoreet id donec ultrices. Fringilla phasellus faucibus scelerisque eleifend donec pretium. Est pellentesque elit ullamcorper dignissim. Mauris ultrices eros in cursus turpis massa tincidunt dui.
+                                    Dalam Kaolin, disediakan tiga metode yang dapat dipilih oleh pengguna, yaitu datang secara langsung (<i>offline</i>), secara virtual tatap muka melalui zoom atau google meet (<i>online meeting</i>), ataupun secara virtual chat melalui WhatsApp (<i>online chat</i>).
                                 </div>
                             </div>
                         </div>
@@ -279,25 +289,12 @@
                         <div class="accordion-item">
                             <h2 class="accordion-header">
                                 <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq2-content-2">
-                                    Tempus quam pellentesque nec nam aliquam sem et tortor consequat?
+                                    Bolehkah orang di luar pangkalpinang melakukan konsultasi statistik melalui Kaolin?
                                 </button>
                             </h2>
                             <div id="faq2-content-2" class="accordion-collapse collapse" data-bs-parent="#faqlist2">
                                 <div class="accordion-body">
-                                    Molestie a iaculis at erat pellentesque adipiscing commodo. Dignissim suspendisse in est ante in. Nunc vel risus commodo viverra maecenas accumsan. Sit amet nisl suscipit adipiscing bibendum est. Purus gravida quis blandit turpis cursus in
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="accordion-item">
-                            <h2 class="accordion-header">
-                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq2-content-3">
-                                    Varius vel pharetra vel turpis nunc eget lorem dolor?
-                                </button>
-                            </h2>
-                            <div id="faq2-content-3" class="accordion-collapse collapse" data-bs-parent="#faqlist2">
-                                <div class="accordion-body">
-                                    Laoreet sit amet cursus sit amet dictum sit amet justo. Mauris vitae ultricies leo integer malesuada nunc vel. Tincidunt eget nullam non nisi est sit amet. Turpis nunc eget lorem dolor sed. Ut venenatis tellus in metus vulputate eu scelerisque. Pellentesque diam volutpat commodo sed egestas egestas fringilla phasellus faucibus. Nibh tellus molestie nunc non blandit massa enim nec.
+                                    <b>Tentu saja boleh</b>, Kaolin diharapkan dapat mempermudah semua konsumen konsultasi statistik, baik yang ada di Kota Pangkalpinang, maupun yang sedang berada di luar Kota Pangkalpinang dalam melakukan konsultasi statistik dengan BPS Kota Pangkalpinang.
                                 </div>
                             </div>
                         </div>

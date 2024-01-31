@@ -28,7 +28,7 @@
                     <div class="col-xl-4 col-lg-4 portfolio-item filter-<?= $month ?>-2023">
                         <div class="card shadow mb-4">
                             <!-- Card Body -->
-                            <div class="card-body">
+                            <div class="card-body list-konsultasi">
                                 <h5 class="card-title text-center" style="font-weight:bold">
                                     <u><?= $kueri[$i]['kategori_instansi'] ?></u>
                                 </h5>
@@ -57,7 +57,7 @@
                                         :
                                     </div>
                                     <div class="col-8">
-                                        <?= $kueri[$i]['tanggal'] ?>
+                                        <?= $kueri[$i]['itanggal'] ?>
                                     </div>
                                     </p>
                                 </div>
@@ -75,7 +75,7 @@
                                     </p>
                                 </div>
                                 <div class="text-center">
-                                    <a href="<?= base_url('detail_konsultasi?tiket=') . $kueri[$i]['tiket'] ?>" class="btn btn-primary">Detail</a>
+                                    <a href="<?= base_url('my_detail?tiket=') . $kueri[$i]['tiket'] ?>" class="btn btn-primary">Detail</a>
                                 </div>
                             </div>
                             <div class="card-footer text-muted text-center">

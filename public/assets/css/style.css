@@ -188,12 +188,12 @@ section {
 }
 
 .header .logo img {
-  max-height: 40px;
+  max-height: 45px;
   margin-right: 6px;
 }
 
 .header .logo span {
-  font-size: 30px;
+  font-size: 35px;
   font-weight: 700;
   letter-spacing: 1px;
   color: #012970;
@@ -520,6 +520,12 @@ section {
 
 .hero .hero-img {
   text-align: right;
+}
+
+.hero p {
+  color: #012970;
+  font-weight: 600;
+  font-size: 1.5rem;
 }
 
 @media (min-width: 1024px) {
